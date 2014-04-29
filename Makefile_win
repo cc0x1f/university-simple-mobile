@@ -1,0 +1,38 @@
+CC = g++
+LD = g++
+
+SRC_DIR = src
+RENDER_DIR = $(SRC_DIR)\render
+OBJPARSER_DIR = $(SRC_DIR)\objparser
+
+# add -DDEBUG=1 to CFLAGS enable debug output
+CFLAGS = -g -Wall -DDEBUG=1
+LDLIBS = -lm -lfreeglut -lglew32 -lopengl32
+INCLUDES = -Isource
+VPATH = src
+
+OBJ = Mobile.o $(SRC_DIR)\ShaderProgram.o $(SRC_DIR)\Camera.o $(SRC_DIR)\GlutProgram.o $(SRC_DIR)\Matrix.o $(OBJPARSER_DIR)\StringExtra.o $(OBJPARSER_DIR)\List.o $(OBJPARSER_DIR)\OBJParser.o $(RENDER_DIR)\RenderingObject.o $(RENDER_DIR)\LineRenderingObject.o $(RENDER_DIR)\GridRenderingObject.o $(RENDER_DIR)\TriangleRenderingObject.o $(RENDER_DIR)\CubeRenderingObject.o $(RENDER_DIR)\OBJRenderingObject.o
+TARGET = Mobile
+
+# Rules
+all: $(TARGET)
+
+$(TARGET).o: $(TARGET).cpp
+	$(CC) $(CFLAGS) $(INCLUDES) -c $^ -o $@
+
+$(SRC_DIR)\%.o: %.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) -c $^ -o $@
+
+$(OBJPARSER_DIR)\%.o: %.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) -c $^ -o $@
+
+$(RENDER_DIR)\%.o: %.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) -c $^ -o $@
+
+clean:
+	del $(SRC_DIR)\*.o $(RENDER_DIR)\*.o $(OBJPARSER_DIR)\*.o *.o $(TARGET).exe
+
+.PHONY: clean
+
+# Dependencies
+$(TARGET): $(OBJ)
