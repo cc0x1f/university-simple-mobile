@@ -13,6 +13,7 @@
 #include "GlHelper.h"
 #include "ShaderProgram.h"
 #include "Camera.h"
+#include "Lightsource.h"
 #include "render/CubeRenderingObject.h"
 #include "render/TriangleRenderingObject.h"
 #include "render/GridRenderingObject.h"
@@ -39,6 +40,11 @@ class GlutProgram {
 		TriangleRenderingObject triangle[2];
 		OBJRenderingObject obj[1];
 		
+		//light source, handles all lights
+		Lightsource lightSource;
+		
+		// light types for the light source
+		DirectionalLight directionalLight;
 
 		// GLUT needs those static functions...
 		static void onDisplayWrapper(void){

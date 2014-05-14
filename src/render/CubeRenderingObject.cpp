@@ -1,6 +1,6 @@
 #include "CubeRenderingObject.h" 
 
-void CubeRenderingObject::initVertices(void) {
+void CubeRenderingObject::initVertices(Vector3f color) {
 	
 	this->VBO_size = 8;
 	this->CBO_size = 8;
@@ -20,14 +20,9 @@ void CubeRenderingObject::initVertices(void) {
 	this->VBO_data[7] = Vector3f(-1.0,  1.0, -1.0);
 
 
-	this->CBO_data[0] = Vector3f(1.0, 0.0,  0.0);
-	this->CBO_data[1] = Vector3f(0.0, 1.0,  0.0);
-	this->CBO_data[2] = Vector3f(0.0,  1.0,  1.0);
-	this->CBO_data[3] = Vector3f(1.0,  1.0,  1.0);
-	this->CBO_data[4] = Vector3f(1.0, 0.0, 1.0);
-	this->CBO_data[5] = Vector3f(0.0, 1.0, 0.0);
-	this->CBO_data[6] = Vector3f(1.0,  0.0, 1.0);
-	this->CBO_data[7] = Vector3f(1.0,  1.0, 1.0);
+	for(int i=0; i<8; i++) {
+		this->CBO_data[i] = color;
+	}
 
 	this->IBO_data[0] = Vector3s(0, 1, 2);
 	this->IBO_data[1] = Vector3s(2, 3, 0);

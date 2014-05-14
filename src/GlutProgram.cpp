@@ -49,17 +49,11 @@ void GlutProgram::init(int *argc, char **argv) {
 	glClearColor(0.5f, 0.5f, 0.5f, 0.0f); // grey background
 	// Enable depth testing
 	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);  
+	glDepthFunc(GL_LESS);
+
+	this->shaderProgram.setVertexShader("shaders/vertexshader.330.vs");
+	this->shaderProgram.setFragmentShader("shaders/fragmentshader.330.fs");
 	
-	// init shader program
-	// fallback to older shading language to support my intel 4400 graphics card
-	if(strncmp("1.30", (const char*) glGetString(GL_SHADING_LANGUAGE_VERSION), 3) == 0) {
-		this->shaderProgram.setVertexShader("shaders/vertexshader.130.vs");
-		this->shaderProgram.setFragmentShader("shaders/fragmentshader.130.fs");
-	} else {
-		this->shaderProgram.setVertexShader("shaders/vertexshader.330.vs");
-		this->shaderProgram.setFragmentShader("shaders/fragmentshader.330.fs");
-	}
 	this->shaderProgram.create();
 	
 	// init the scene
@@ -72,15 +66,21 @@ void GlutProgram::initScene(void) {
 	this->camera.zoom(0.5f);
 	this->camera.rotateY(-45);
 	
+	// init lightsource
+	this->lightSource.init(&this->shaderProgram);
+	this->directionalLight.color = Vector3f(1.0f, 1.0f, 1.0f);
+    this->directionalLight.ambientIntensity = 0.5f;
+	this->lightSource.setDirectionalLight(this->directionalLight);
+	
 	// init rendering cubes
 	// left cube
-	this->cube[0].initVertices();
+	this->cube[0].initVertices(Vector3f(1.0f,0.0f,0.0f));
 	this->cube[0].init(&this->shaderProgram);
 	this->cube[0].scale(1);
 	this->cube[0].translate(0.0f, 2.0f, 0.0f);
 	this->cube[0].setParent(&this->line[2]);
 	// right cube
-	this->cube[1].initVertices();
+	this->cube[1].initVertices(Vector3f(0.0f,1.0f,0.0f));
 	this->cube[1].init(&this->shaderProgram);
 	this->cube[1].rotate(45, Vector3f(1.0,0.0,0.0));
 	this->cube[1].translate(0.0f, 1.0f, 0.0f);
@@ -180,6 +180,7 @@ void GlutProgram::onDisplay(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	this->camera.render();
+	this->lightSource.setDirectionalLight(this->directionalLight);
 
 	// rendering hirarchie
 	this->line[0].render();
@@ -239,6 +240,12 @@ void GlutProgram::onKeyboardInput(unsigned char key, int x, int y) {
 			break;
 		case 'r':
 			this->camera.toggleAutoRotate();
+			break;
+		case 'm':
+			this->directionalLight.ambientIntensity += 0.05f;
+			break;
+		case 'n':
+			this->directionalLight.ambientIntensity -= 0.05f;
 			break;
 		default:
 			break;

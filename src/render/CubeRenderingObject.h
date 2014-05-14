@@ -5,7 +5,7 @@
 class CubeRenderingObject : public RenderingObject {
 	private:
 	public:
-		void initVertices(void);
+		void initVertices(Vector3f color);
 };
 #endif // __CUBE_RENDERING_OBJECT_H__
  
