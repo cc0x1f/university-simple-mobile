@@ -105,8 +105,8 @@ void Camera::update(void) {
 
 void Camera::render(void) {    
 	// set uniform variables
-	glUniformMatrix4fv(this->projectionUniform, 1, GL_TRUE, glm::value_ptr(this->projectionMatrix));
-	glUniformMatrix4fv(this->viewUniform, 1, GL_TRUE, glm::value_ptr(viewMatrix));
+	glUniformMatrix4fv(this->projectionUniform, 1, GL_FALSE, glm::value_ptr(this->projectionMatrix));
+	glUniformMatrix4fv(this->viewUniform, 1, GL_FALSE, glm::value_ptr(viewMatrix));
 }
 
 glm::mat4 Camera::getProjectionMatrix(void) {

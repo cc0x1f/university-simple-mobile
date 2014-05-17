@@ -67,7 +67,6 @@ void GlutProgram::initScene(void) {
 	this->camera.zoom(0.5f);
 	this->camera.rotateY(-45);
 	
-	
 	// init lightsource
 	this->lightSource.init(&this->shaderProgram);
 	this->directionalLight.color = glm::vec3(1.0f, 1.0f, 1.0f);
@@ -197,22 +196,19 @@ void GlutProgram::onDisplay(void) {
 							this->triangle[1].render();
 								this->line[6].render();
 									this->obj[0].render();
-	
+
 	int i;
 	for(i = 0; i < 3; i++) {
 		this->grid[i].render();
 	}
 
 	/* Swap between front and back buffer */
-	
-	
-	Helper::printMatrix(this->line[0].getRenderingMatrix());
 	glutSwapBuffers();
 }
 
 void GlutProgram::onIdle(void) {
 
-	/*this->camera.update();
+	this->camera.update();
 	
 	this->line[0].rotateY(0.1f);
 	
@@ -222,8 +218,8 @@ void GlutProgram::onIdle(void) {
 	this->triangle[0].rotateX(0.2f);
 	this->triangle[1].rotateX(0.5f);
 	
-	this->obj[0].rotateY(1.0f);*/
-	
+ 	this->obj[0].rotateY(1.0f);
+
 	glutPostRedisplay();
 }
 
@@ -251,6 +247,12 @@ void GlutProgram::onKeyboardInput(unsigned char key, int x, int y) {
 			break;
 		case 'n':
 			this->directionalLight.ambientIntensity -= 0.05f;
+			break;
+		case 'i':
+			this->camera.translateZ(1.0f);
+			break;
+		case 'o':
+			this->camera.translateZ(-1.0f);
 			break;
 		default:
 			break;

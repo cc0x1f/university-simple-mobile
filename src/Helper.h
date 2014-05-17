@@ -17,27 +17,27 @@ class Helper {
 	public:
 		// A simple struct for a 2 point short vector
 		struct vec2s {
-			short x;
-			short y;
+			unsigned short x;
+			unsigned short y;
 
 			vec2s() {
 			}
 
-			vec2s(short fx, short fy) {
+			vec2s(unsigned short fx, unsigned short fy) {
 				x = fx;
 				y = fy;
 			}
 		};
 		// A simple struct for a 3 point short vector
 		struct vec3s {
-			short x;
-			short y;
-			short z;
+			unsigned short x;
+			unsigned short y;
+			unsigned short z;
 
 			vec3s() {
 			}
 
-			vec3s(short fx, short fy, short fz) {
+			vec3s(unsigned short fx, unsigned short fy, unsigned short fz) {
 				x = fx;
 				y = fy;
 				z = fz;

@@ -69,7 +69,7 @@ glm::mat4 RenderingObject::getTranslationMatrix(void) {
 }
 
 void RenderingObject::scale(float scale) {
-	this->scaleMatrix = glm::scale(glm::mat4(1.0f),glm::vec3(scale));
+	this->scaleMatrix = glm::scale(glm::mat4(1.0f),glm::vec3(scale)) * this->scaleMatrix;
 }
 
 void RenderingObject::rotateX(float angle) {
@@ -127,11 +127,11 @@ void RenderingObject::render(void) {
 	
 	// if we have a parent, recalculate our model matrix
 	if(this->parent != NULL) {
-		this->renderingModelMatrix = this->modelMatrix * this->parent->getRenderingMatrix();
+		this->renderingModelMatrix = this->parent->getRenderingMatrix() * this->modelMatrix;
 	}
 
 	// set uniform variables
-	glUniformMatrix4fv(this->modelUniform, 1, GL_TRUE, glm::value_ptr(this->renderingModelMatrix));
+	glUniformMatrix4fv(this->modelUniform, 1, GL_FALSE, glm::value_ptr(this->renderingModelMatrix));
 
 	// draw
 	glDrawElements(this->renderingMode, size/sizeof(GLushort), GL_UNSIGNED_SHORT, 0);
