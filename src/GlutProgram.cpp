@@ -22,8 +22,8 @@ void GlutProgram::setTitle(const char *title){
 void GlutProgram::init(int *argc, char **argv) {
 	glutInit(argc, argv);
 	// Define a opengl context...
-	//glutInitContextVersion(3,3);
-	//glutInitContextProfile(GLUT_CORE_PROFILE);
+	// glutInitContextVersion(3,3);
+	// glutInitContextProfile(GLUT_CORE_PROFILE);
 	glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGBA|GLUT_DEPTH);
 	glutInitWindowSize(this->width, this->height);
 	glutInitWindowPosition(this->posX, this->posY);
@@ -63,26 +63,28 @@ void GlutProgram::init(int *argc, char **argv) {
 void GlutProgram::initScene(void) {
 	// init camera
 	this->camera.init(&this->shaderProgram);
+	
 	this->camera.zoom(0.5f);
 	this->camera.rotateY(-45);
 	
+	
 	// init lightsource
 	this->lightSource.init(&this->shaderProgram);
-	this->directionalLight.color = Vector3f(1.0f, 1.0f, 1.0f);
+	this->directionalLight.color = glm::vec3(1.0f, 1.0f, 1.0f);
     this->directionalLight.ambientIntensity = 0.5f;
 	this->lightSource.setDirectionalLight(this->directionalLight);
 	
 	// init rendering cubes
 	// left cube
-	this->cube[0].initVertices(Vector3f(1.0f,0.0f,0.0f));
+	this->cube[0].initVertices(glm::vec3(1.0f,0.0f,0.0f));
 	this->cube[0].init(&this->shaderProgram);
 	this->cube[0].scale(1);
 	this->cube[0].translate(0.0f, 2.0f, 0.0f);
 	this->cube[0].setParent(&this->line[2]);
 	// right cube
-	this->cube[1].initVertices(Vector3f(0.0f,1.0f,0.0f));
+	this->cube[1].initVertices(glm::vec3(0.0f,1.0f,0.0f));
 	this->cube[1].init(&this->shaderProgram);
-	this->cube[1].rotate(45, Vector3f(1.0,0.0,0.0));
+	this->cube[1].rotate(45, glm::vec3(1.0,0.0,0.0));
 	this->cube[1].translate(0.0f, 1.0f, 0.0f);
 	this->cube[1].scale(0.6f);
 	this->cube[1].setParent(&this->line[3]);
@@ -102,69 +104,69 @@ void GlutProgram::initScene(void) {
 	this->triangle[1].setParent(&this->line[5]);
 	
 	// init rendering obj-objects
-	this->obj[0].initVertices("models/teapot.obj", Vector3f(0.7f,0.7f,0.7f)); // grey teapot
+	this->obj[0].initVertices("models/teapot.obj", glm::vec3(0.7f,0.7f,0.7f)); // grey teapot
 	this->obj[0].init(&this->shaderProgram);
 	this->obj[0].translate(0.0f, -0.75f, 0.0f);
 	this->obj[0].scale(0.5f);
 	this->obj[0].setParent(&this->line[6]);
 	
 	// background grids
-	this->grid[0].initVertices(10,10, Vector3f(1.0,0.0,0.0));
+	this->grid[0].initVertices(10,10, glm::vec3(1.0,0.0,0.0));
 	this->grid[0].init(&this->shaderProgram);
 	this->grid[0].rotateX(90);
 	this->grid[0].scale(10);
 	this->grid[0].translate(-5,-5,-5);
-	this->grid[1].initVertices(10,10, Vector3f(0.0,1.0,0.0));
+	this->grid[1].initVertices(10,10, glm::vec3(0.0,1.0,0.0));
 	this->grid[1].init(&this->shaderProgram);
 	this->grid[1].rotateY(-90);
 	this->grid[1].scale(10);
 	this->grid[1].translate(-5,-5,-5);
-	this->grid[2].initVertices(10,10, Vector3f(0.0,0.0,1.0));
+	this->grid[2].initVertices(10,10, glm::vec3(0.0,0.0,1.0));
 	this->grid[2].init(&this->shaderProgram);
 	this->grid[2].scale(10);
 	this->grid[2].translate(-5,-5,-5);
 	
 	// lines
 	// top centered vertical line
-	this->line[0].initVertices(Vector3f(1.0,1.0,1.0));
+	this->line[0].initVertices(glm::vec3(1.0,1.0,1.0));
 	this->line[0].init(&this->shaderProgram);
 	this->line[0].scale(1);
 	this->line[0].translate(0.0f,4.0f,-1.0f);
 	// top horizontal line
-	this->line[1].initVertices(Vector3f(1.0,1.0,1.0)); 
+	this->line[1].initVertices(glm::vec3(1.0,1.0,1.0)); 
 	this->line[1].init(&this->shaderProgram);
 	this->line[1].rotateZ(-90);
 	this->line[1].scale(4);
 	this->line[1].translate(-2.0f,0.0f,0.0f);
 	this->line[1].setParent(&this->line[0]);
 	// top left vertical line
-	this->line[2].initVertices(Vector3f(1.0,1.0,1.0)); 
+	this->line[2].initVertices(glm::vec3(1.0,1.0,1.0)); 
 	this->line[2].init(&this->shaderProgram);
 	this->line[2].scale(1);
 	this->line[2].rotateZ(-90);
 	this->line[2].setParent(&this->line[1]);
 	// top right vertical line
-	this->line[3].initVertices(Vector3f(1.0,1.0,1.0)); 
+	this->line[3].initVertices(glm::vec3(1.0,1.0,1.0)); 
 	this->line[3].init(&this->shaderProgram);
 	this->line[3].scale(1);
 	this->line[3].rotateZ(-90);
 	this->line[3].translate(0.0f,1.0f,0.0f);
 	this->line[3].setParent(&this->line[1]);
 	// bottom centered vertical line
-	this->line[4].initVertices(Vector3f(1.0,1.0,1.0));
+	this->line[4].initVertices(glm::vec3(1.0,1.0,1.0));
 	this->line[4].init(&this->shaderProgram);
 	this->line[4].scale(2);
 	this->line[4].translate(0.0f,0.0f,0.0f);
 	this->line[4].setParent(&this->cube[0]);
 	// bottom horizontal line
-	this->line[5].initVertices(Vector3f(1.0,1.0,1.0));
+	this->line[5].initVertices(glm::vec3(1.0,1.0,1.0));
 	this->line[5].init(&this->shaderProgram);
 	this->line[5].scale(4);
 	this->line[5].rotateZ(-90);
 	this->line[5].translate(-1.0f,1.0f,0.0f);
 	this->line[5].setParent(&this->line[4]);
 	// lowest vertical line
-	this->line[6].initVertices(Vector3f(1.0,1.0,1.0));
+	this->line[6].initVertices(glm::vec3(1.0,1.0,1.0));
 	this->line[6].init(&this->shaderProgram);
 	this->line[6].scale(1);
 	this->line[6].translate(0.0f,-2.0f,0.0f);
@@ -181,7 +183,7 @@ void GlutProgram::onDisplay(void) {
 
 	this->camera.render();
 	this->lightSource.setDirectionalLight(this->directionalLight);
-
+	
 	// rendering hirarchie
 	this->line[0].render();
 		this->line[1].render();
@@ -201,13 +203,16 @@ void GlutProgram::onDisplay(void) {
 		this->grid[i].render();
 	}
 
-	/* Swap between front and back buffer */ 
+	/* Swap between front and back buffer */
+	
+	
+	Helper::printMatrix(this->line[0].getRenderingMatrix());
 	glutSwapBuffers();
 }
 
 void GlutProgram::onIdle(void) {
 
-	this->camera.update();
+	/*this->camera.update();
 	
 	this->line[0].rotateY(0.1f);
 	
@@ -217,7 +222,7 @@ void GlutProgram::onIdle(void) {
 	this->triangle[0].rotateX(0.2f);
 	this->triangle[1].rotateX(0.5f);
 	
-	this->obj[0].rotateY(1.0f);
+	this->obj[0].rotateY(1.0f);*/
 	
 	glutPostRedisplay();
 }

@@ -3,15 +3,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <vector>
 
 /* OpenGL includes */
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 
+#define GLM_FORCE_RADIANS  /* Use radians in all GLM functions */
+/* GLM includes - adjust path as required for local installation */
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp" /* Provides glm::translate, glm::rotate, glm::scale, glm::perspective */
+#include "glm/gtc/type_ptr.hpp"         /* Vector/matrix handling */
+
 /* local includes */
-#include "../GlHelper.h"
+#include "../Helper.h"
 #include "../ShaderProgram.h"
-#include "../Matrix.h"
 
 #ifndef __RENDERING_OBJECT_H__
 #define __RENDERING_OBJECT_H__
@@ -23,20 +29,16 @@ class RenderingObject {
 		
 		RenderingObject *parent;
 
-		Vector3f *VBO_data;
-		Vector3f *CBO_data;
-		Vector3s *IBO_data;
+		std::vector<glm::vec3> VBO_data;
+		std::vector<glm::vec3> CBO_data;
+		std::vector<Helper::vec3s> IBO_data;
 
-		int VBO_size;
-		int CBO_size;
-		int IBO_size;
-
-		Matrix4f modelMatrix; // Model matrix
-		Matrix4f renderingModelMatrix; // FINAL Model matrix for rendering
+		glm::mat4 modelMatrix; // Model matrix
+		glm::mat4 renderingModelMatrix; // FINAL Model matrix for rendering
 		
-		Matrix4f rotationMatrix;
-		Matrix4f scaleMatrix;
-		Matrix4f translationMatrix;
+		glm::mat4 rotationMatrix;
+		glm::mat4 scaleMatrix;
+		glm::mat4 translationMatrix;
 
 		GLint modelUniform;
 		GLenum renderingMode;
@@ -51,15 +53,15 @@ class RenderingObject {
 		void rotateX(float angle);
 		void rotateY(float angle);
 		void rotateZ(float angle);
-		void rotate(float angle, Vector3f axes);
+		void rotate(float angle, glm::vec3 axes);
 		void translateX(float x);
 		void translateY(float y);
 		void translateZ(float z);
 		void translate(float x, float y, float z);
-		Matrix4f getRenderingMatrix(void);
-		Matrix4f getRotationMatrix(void);
-		Matrix4f getScaleMatrix(void);
-		Matrix4f getTranslationMatrix(void);
+		glm::mat4 getRenderingMatrix(void);
+		glm::mat4 getRotationMatrix(void);
+		glm::mat4 getScaleMatrix(void);
+		glm::mat4 getTranslationMatrix(void);
 };
 #endif // __RENDERING_OBJECT_H__
  

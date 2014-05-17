@@ -1,4 +1,3 @@
-/* OpenGL includes */
 /* Standard includes */
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,8 +8,14 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 
+#define GLM_FORCE_RADIANS  /* Use radians in all GLM functions */
+/* GLM includes - adjust path as required for local installation */
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp" /* Provides glm::translate, glm::rotate, glm::scale, glm::perspective */
+#include "glm/gtc/type_ptr.hpp"         /* Vector/matrix handling */
+
 /* local includes */
-#include "GlHelper.h"
+#include "Helper.h"
 #include "ShaderProgram.h"
 #include "Camera.h"
 #include "Lightsource.h"

@@ -5,11 +5,6 @@ void Lightsource::init(ShaderProgram *shaderProgramm) {
 	// init uniform variables
 	this->directionalLightColorUniform = shaderProgramm->getUniformLocation("gDirectionalLight.color");
 	this->directionalLightAmbientIntensityUniform = shaderProgramm->getUniformLocation("gDirectionalLight.ambientIntensity");
-	
-#ifdef DEBUG
-	printf("Lightsource initialized!\n");
-	fflush(stdout);
-#endif
 }
 
 void Lightsource::setDirectionalLight(const DirectionalLight& light) {

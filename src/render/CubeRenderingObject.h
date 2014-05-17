@@ -5,7 +5,7 @@
 class CubeRenderingObject : public RenderingObject {
 	private:
 	public:
-		void initVertices(Vector3f color);
+		void initVertices(glm::vec3 color);
 };
 #endif // __CUBE_RENDERING_OBJECT_H__
  

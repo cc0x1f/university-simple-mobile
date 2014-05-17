@@ -4,9 +4,9 @@
 #define __GRID_RENDERING_OBJECT_H__
 class GridRenderingObject : public RenderingObject {
 	private:
-		Vector2s *IBO_data;
+		std::vector<Helper::vec2s> IBO_data;
 	public:
-		void initVertices(int linesx, int linesy, Vector3f color);
+		void initVertices(int linesx, int linesy, glm::vec3 color);
 		void init(ShaderProgram *shaderProgramm);
 };
 #endif // __GRID_RENDERING_OBJECT_H__
