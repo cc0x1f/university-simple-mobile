@@ -267,6 +267,9 @@ void GlutProgram::onKeyboardInput(unsigned char key, int x, int y) {
 	printf("Input event received: %c\n", key);
 	fflush(stdout);
 #endif
+	float oldR = this->directionalLight.color.x;
+	float oldG = this->directionalLight.color.y;
+	float oldB = this->directionalLight.color.z;
 	
 	switch (key) {
 		case 27:
@@ -290,6 +293,37 @@ void GlutProgram::onKeyboardInput(unsigned char key, int x, int y) {
 			break;
 		case 'o':
 			this->camera.translateZ(-1.0f);
+			break;
+		// color changing...
+		case '1':
+			oldR += 0.34f;
+			
+			if(oldR > 1.0f) {
+				oldR = 0;
+			}
+			
+			this->directionalLight.color = glm::vec3(oldR, oldG, oldB);
+			this->lightSource.setDirectionalLight(this->directionalLight);
+			break;
+		case '2':
+			oldG += 0.34f;
+			
+			if(oldG > 1.0f) {
+				oldG = 0;
+			}
+			
+			this->directionalLight.color = glm::vec3(oldR, oldG, oldB);
+			this->lightSource.setDirectionalLight(this->directionalLight);
+			break;
+		case '3':
+			oldB += 0.34f;
+			
+			if(oldB > 1.0f) {
+				oldB = 0;
+			}
+			
+			this->directionalLight.color = glm::vec3(oldR, oldG, oldB);
+			this->lightSource.setDirectionalLight(this->directionalLight);
 			break;
 		default:
 			break;
