@@ -46,7 +46,7 @@ void GlutProgram::init(int *argc, char **argv) {
 	
 	printf("Initialized, OpenGL version: %s\n", glGetString(GL_VERSION));
 	printf("Supported GLSL version: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
-	glClearColor(0.5f, 0.5f, 0.5f, 0.0f); // grey background
+	glClearColor(0.1f, 0.1f, 0.1f, 0.0f); // dark background
 	// Enable depth testing
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
@@ -85,13 +85,14 @@ void GlutProgram::initScene(void) {
 	
 	this->camera.zoom(0.5f);
 	this->camera.rotateY(-45);
+	this->camera.translateZ(-2.0f);
 	
 	// init lightsource
 	this->lightSource.init(&this->shaderProgram);
 	this->directionalLight.position = glm::vec3(4.0f, 4.0f, 10.0f);
 	this->directionalLight.color = glm::vec3(1.0f, 1.0f, 1.0f);
-    this->directionalLight.ambientIntensity = 0.2f;
-	this->directionalLight.diffuseIntensity = 0.5f;
+    this->directionalLight.ambientIntensity = 0.5f;
+	this->directionalLight.diffuseIntensity = 0.7f;
 	this->lightSource.setDirectionalLight(this->directionalLight);
 	
 	// init rendering cubes
@@ -132,7 +133,7 @@ void GlutProgram::initScene(void) {
 	this->ball[0].setParent(&this->line[5]);
 	
 	// init rendering teapot-objects
-	this->teapot[0].initVertices("models/teapot.obj", glm::vec3(0.7f,0.7f,0.7f)); // grey teapot
+	this->teapot[0].initVertices("models/teapot.obj", glm::vec3(1.0f,1.0f,0.0f));
 	this->teapot[0].init(&this->shaderProgram);
 	this->teapot[0].setMatSpecularIntensity(1.0f);
 	this->teapot[0].setMatSpecularPower(80.0f);
@@ -140,21 +141,21 @@ void GlutProgram::initScene(void) {
 	this->teapot[0].scale(0.5f);
 	this->teapot[0].setParent(&this->line[6]);
 	
-	// background grids
-	this->grid[0].initVertices(10,10, glm::vec3(1.0,0.0,0.0));
-	this->grid[0].init(&this->shaderProgram);
-	this->grid[0].rotateX(90);
-	this->grid[0].scale(10);
-	this->grid[0].translate(-5,-5,-5);
-	this->grid[1].initVertices(10,10, glm::vec3(0.0,1.0,0.0));
-	this->grid[1].init(&this->shaderProgram);
-	this->grid[1].rotateY(-90);
-	this->grid[1].scale(10);
-	this->grid[1].translate(-5,-5,-5);
-	this->grid[2].initVertices(10,10, glm::vec3(0.0,0.0,1.0));
-	this->grid[2].init(&this->shaderProgram);
-	this->grid[2].scale(10);
-	this->grid[2].translate(-5,-5,-5);
+	// background walls
+	this->wall[0].initVertices("models/rectangle.obj", glm::vec3(0.8f,0.8f,1.0f));
+	this->wall[0].init(&this->shaderProgram);
+	this->wall[0].rotateX(90);
+	this->wall[0].scale(10);
+	this->wall[0].translate(2,-7,2);
+	this->wall[1].initVertices("models/rectangle.obj", glm::vec3(0.8f,0.8f,1.0f));
+	this->wall[1].init(&this->shaderProgram);
+	this->wall[1].rotateY(-90);
+	this->wall[1].scale(10);
+	this->wall[1].translate(-7, 2, 2);
+	this->wall[2].initVertices("models/rectangle.obj", glm::vec3(0.8f,0.8f,1.0f));
+	this->wall[2].init(&this->shaderProgram);
+	this->wall[2].scale(10);
+	this->wall[2].translate(2, 2, -7);
 	
 	// lines
 	// top centered vertical line
@@ -230,7 +231,7 @@ void GlutProgram::onDisplay(void) {
 
 	int i;
 	for(i = 0; i < 3; i++) {
-		this->grid[i].render();
+		this->wall[i].render();
 	}
 
 	/* Swap between front and back buffer */

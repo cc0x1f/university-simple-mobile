@@ -34,6 +34,7 @@ class Camera {
 		GLint projectionUniform;
 		
 		bool autoRotate;
+		float autoRotated;
     
 		void calculateViewMatrix(void);
 	public:

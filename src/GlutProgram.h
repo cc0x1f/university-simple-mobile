@@ -19,7 +19,6 @@
 #include "ShaderProgram.h"
 #include "Camera.h"
 #include "Lightsource.h"
-#include "render/GridRenderingObject.h"
 #include "render/LineRenderingObject.h"
 #include "render/OBJRenderingObject.h"
 
@@ -39,7 +38,7 @@ class GlutProgram {
 		ShaderProgram shaderProgram;
 		Camera camera;
 		LineRenderingObject line[7]; // lines for connecting all other elements
-		GridRenderingObject grid[3]; // background grids
+		OBJRenderingObject wall[3]; // background walls
 		// scene rendering objects =)
 		OBJRenderingObject cube[2];
 		OBJRenderingObject pyramid[1];

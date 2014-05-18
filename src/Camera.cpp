@@ -5,6 +5,7 @@ void Camera::init(ShaderProgram *shaderProgramm) {
 	this->projectionUniform = shaderProgramm->getUniformLocation("ProjectionMatrix");
 	this->viewUniform = shaderProgramm->getUniformLocation("ViewMatrix");
 	this->autoRotate = true;
+	this->autoRotated = 0;
 	
 	/* Initialize matrices */
 	/* Set projection transform */
@@ -99,7 +100,17 @@ void Camera::translate(float x, float y, float z) {
 void Camera::update(void) {    
 	// rotate the cam
 	if(this->autoRotate == true) {
-		this->rotateY(0.01f);
+		this->autoRotated += 0.01f;
+		
+		if(this->autoRotated >= 0 && this->autoRotated < 55.0f) {
+			this->rotateY(0.01f);
+		} else if (this->autoRotated >= 55.0f && this->autoRotated < 160.0f) {
+			this->rotateY(-0.01f);
+		} else if (this->autoRotated >= 160.0f && this->autoRotated < 265.0f){
+			this->rotateY(0.01f);
+		} else {
+			this->autoRotated = 55;
+		}
 	}
 }
 
