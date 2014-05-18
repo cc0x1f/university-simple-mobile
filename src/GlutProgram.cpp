@@ -146,58 +146,58 @@ void GlutProgram::initScene(void) {
 	this->wall[0].init(&this->shaderProgram);
 	this->wall[0].rotateX(90);
 	this->wall[0].scale(10);
-	this->wall[0].translate(2,-7,2);
+	this->wall[0].translate(3, -7, 3);
 	this->wall[1].initVertices("models/rectangle.obj", glm::vec3(0.8f,0.8f,1.0f));
 	this->wall[1].init(&this->shaderProgram);
 	this->wall[1].rotateY(-90);
 	this->wall[1].scale(10);
-	this->wall[1].translate(-7, 2, 2);
+	this->wall[1].translate(-7, 3, 3);
 	this->wall[2].initVertices("models/rectangle.obj", glm::vec3(0.8f,0.8f,1.0f));
 	this->wall[2].init(&this->shaderProgram);
 	this->wall[2].scale(10);
-	this->wall[2].translate(2, 2, -7);
+	this->wall[2].translate(3, 3, -7);
 	
 	// lines
 	// top centered vertical line
-	this->line[0].initVertices(glm::vec3(1.0,1.0,1.0));
+	this->line[0].initVertices(glm::vec3(0.0,0.0,0.0));
 	this->line[0].init(&this->shaderProgram);
 	this->line[0].scale(1);
 	this->line[0].translate(0.0f,4.0f,-1.0f);
 	// top horizontal line
-	this->line[1].initVertices(glm::vec3(1.0,1.0,1.0)); 
+	this->line[1].initVertices(glm::vec3(0.0,0.0,0.0)); 
 	this->line[1].init(&this->shaderProgram);
 	this->line[1].rotateZ(-90);
 	this->line[1].scale(4);
 	this->line[1].translate(-2.0f,0.0f,0.0f);
 	this->line[1].setParent(&this->line[0]);
 	// top left vertical line
-	this->line[2].initVertices(glm::vec3(1.0,1.0,1.0)); 
+	this->line[2].initVertices(glm::vec3(0.0,0.0,0.0)); 
 	this->line[2].init(&this->shaderProgram);
 	this->line[2].scale(1);
 	this->line[2].rotateZ(-90);
 	this->line[2].setParent(&this->line[1]);
 	// top right vertical line
-	this->line[3].initVertices(glm::vec3(1.0,1.0,1.0)); 
+	this->line[3].initVertices(glm::vec3(0.0,0.0,0.0)); 
 	this->line[3].init(&this->shaderProgram);
 	this->line[3].scale(1);
 	this->line[3].rotateZ(-90);
 	this->line[3].translate(0.0f,1.0f,0.0f);
 	this->line[3].setParent(&this->line[1]);
 	// bottom centered vertical line
-	this->line[4].initVertices(glm::vec3(1.0,1.0,1.0));
+	this->line[4].initVertices(glm::vec3(0.0,0.0,0.0));
 	this->line[4].init(&this->shaderProgram);
 	this->line[4].scale(2);
 	this->line[4].translate(0.0f,0.0f,0.0f);
 	this->line[4].setParent(&this->cube[0]);
 	// bottom horizontal line
-	this->line[5].initVertices(glm::vec3(1.0,1.0,1.0));
+	this->line[5].initVertices(glm::vec3(0.0,0.0,0.0));
 	this->line[5].init(&this->shaderProgram);
 	this->line[5].scale(4);
 	this->line[5].rotateZ(-90);
 	this->line[5].translate(-1.0f,1.0f,0.0f);
 	this->line[5].setParent(&this->line[4]);
 	// lowest vertical line
-	this->line[6].initVertices(glm::vec3(1.0,1.0,1.0));
+	this->line[6].initVertices(glm::vec3(0.0,0.0,0.0));
 	this->line[6].init(&this->shaderProgram);
 	this->line[6].scale(1);
 	this->line[6].translate(0.0f,-1.5f,0.0f);
