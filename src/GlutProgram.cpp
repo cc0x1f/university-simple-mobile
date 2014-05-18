@@ -127,8 +127,7 @@ void GlutProgram::initScene(void) {
 	this->ball[0].init(&this->shaderProgram);
 	this->ball[0].setMatSpecularIntensity(1.0f);
 	this->ball[0].setMatSpecularPower(32.0f);
-	this->ball[0].scale(0.2f);
-	this->ball[0].translate(-0.25f, 0.0f, 0.0f);
+	this->ball[0].translate(-0.27f, 0.0f, 0.0f);
 	this->ball[0].rotateZ(-90);
 	this->ball[0].setParent(&this->line[5]);
 	
@@ -200,7 +199,7 @@ void GlutProgram::initScene(void) {
 	this->line[6].initVertices(glm::vec3(1.0,1.0,1.0));
 	this->line[6].init(&this->shaderProgram);
 	this->line[6].scale(1);
-	this->line[6].translate(0.0f,-9.5f,0.0f);
+	this->line[6].translate(0.0f,-1.5f,0.0f);
 	this->line[6].setParent(&this->ball[0]);
 }
 
