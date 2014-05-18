@@ -7,7 +7,10 @@ struct DirectionalLight
 	vec3 color;
 	vec3 position;
 	float ambientIntensity;
-	float diffuseIntensity; 
+	float diffuseIntensity;
+	float useAmbient;
+	float useDiffuse;
+	float useSpecular;
 };
 
 // Values that stay constant for the whole mesh.
@@ -58,6 +61,18 @@ void main()
 	phongTerm = pow(phongTerm, materialSpecularPower);
 
 	specularColor = vec4(gDirectionalLight.color, 1.0f) * materialSpecularIntensity * phongTerm;
+	
+	if (gDirectionalLight.useDiffuse < 0.5) {
+		diffuseColor  = vec4(0, 0, 0, 0);
+	}
+	
+	if (gDirectionalLight.useAmbient < 0.5) {
+		ambientColor  = vec4(0, 0, 0, 0);
+	}
+	
+	if (gDirectionalLight.useSpecular < 0.5) {
+		specularColor  = vec4(0, 0, 0, 0);
+	}
 
 	FragColor = vColor * (ambientColor + diffuseColor  + specularColor);
 }

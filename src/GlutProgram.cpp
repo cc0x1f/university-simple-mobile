@@ -93,6 +93,9 @@ void GlutProgram::initScene(void) {
 	this->directionalLight.color = glm::vec3(1.0f, 1.0f, 1.0f);
     this->directionalLight.ambientIntensity = 0.5f;
 	this->directionalLight.diffuseIntensity = 0.7f;
+	this->directionalLight.useAmbient = 1;
+	this->directionalLight.useDiffuse = 1;
+	this->directionalLight.useSpecular = 1;
 	this->lightSource.setDirectionalLight(this->directionalLight);
 	
 	// init rendering cubes
@@ -323,6 +326,19 @@ void GlutProgram::onKeyboardInput(unsigned char key, int x, int y) {
 			}
 			
 			this->directionalLight.color = glm::vec3(oldR, oldG, oldB);
+			this->lightSource.setDirectionalLight(this->directionalLight);
+			break;
+		// enable lightning parts
+		case 'a':
+			this->directionalLight.useAmbient = glm::abs(1 - this->directionalLight.useAmbient);
+			this->lightSource.setDirectionalLight(this->directionalLight);
+			break;
+		case 'd':
+			this->directionalLight.useDiffuse = glm::abs(1 - this->directionalLight.useDiffuse);
+			this->lightSource.setDirectionalLight(this->directionalLight);
+			break;
+		case 's':
+			this->directionalLight.useSpecular = glm::abs(1 - this->directionalLight.useSpecular);
 			this->lightSource.setDirectionalLight(this->directionalLight);
 			break;
 		default:
