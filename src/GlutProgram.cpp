@@ -56,6 +56,8 @@ void GlutProgram::init(int *argc, char **argv) {
 	
 	this->shaderProgram.create();
 	
+	this->rotateMobile = true;
+	
 	// init the scene
 	this->initScene();
 }
@@ -69,20 +71,26 @@ void GlutProgram::initScene(void) {
 	
 	// init lightsource
 	this->lightSource.init(&this->shaderProgram);
+	this->directionalLight.position = glm::vec3(4.0f, 4.0f, 4.0f);
 	this->directionalLight.color = glm::vec3(1.0f, 1.0f, 1.0f);
-    this->directionalLight.ambientIntensity = 0.5f;
+    this->directionalLight.ambientIntensity = 0.2f;
+	this->directionalLight.diffuseIntensity = 0.5f;
 	this->lightSource.setDirectionalLight(this->directionalLight);
 	
 	// init rendering cubes
 	// left cube
 	this->cube[0].initVertices(glm::vec3(1.0f,0.0f,0.0f));
 	this->cube[0].init(&this->shaderProgram);
+	this->cube[0].setMatSpecularIntensity(1.0f);
+	this->cube[0].setMatSpecularPower(32.0f);
 	this->cube[0].scale(1);
 	this->cube[0].translate(0.0f, 2.0f, 0.0f);
 	this->cube[0].setParent(&this->line[2]);
 	// right cube
 	this->cube[1].initVertices(glm::vec3(0.0f,1.0f,0.0f));
 	this->cube[1].init(&this->shaderProgram);
+	this->cube[1].setMatSpecularIntensity(1.0f);
+	this->cube[1].setMatSpecularPower(10.0f);
 	this->cube[1].rotate(45, glm::vec3(1.0,0.0,0.0));
 	this->cube[1].translate(0.0f, 1.0f, 0.0f);
 	this->cube[1].scale(0.6f);
@@ -92,12 +100,16 @@ void GlutProgram::initScene(void) {
 	// left triangle
 	this->triangle[0].initVertices();
 	this->triangle[0].init(&this->shaderProgram);
+	this->triangle[0].setMatSpecularIntensity(1.0f);
+	this->triangle[0].setMatSpecularPower(32.0f);
 	this->triangle[0].translate(-0.25f, 1.0f, 0.0f);
 	this->triangle[0].rotateZ(-90);
 	this->triangle[0].setParent(&this->line[5]);
 	// right triangle
 	this->triangle[1].initVertices();
 	this->triangle[1].init(&this->shaderProgram);
+	this->triangle[1].setMatSpecularIntensity(1.0f);
+	this->triangle[1].setMatSpecularPower(32.0f);
 	this->triangle[1].translate(-0.25f, 0.0f, 0.0f);
 	this->triangle[1].rotateZ(-90);
 	this->triangle[1].setParent(&this->line[5]);
@@ -105,6 +117,8 @@ void GlutProgram::initScene(void) {
 	// init rendering obj-objects
 	this->obj[0].initVertices("models/teapot.obj", glm::vec3(0.7f,0.7f,0.7f)); // grey teapot
 	this->obj[0].init(&this->shaderProgram);
+	this->obj[0].setMatSpecularIntensity(1.0f);
+	this->obj[0].setMatSpecularPower(32.0f);
 	this->obj[0].translate(0.0f, -0.75f, 0.0f);
 	this->obj[0].scale(0.5f);
 	this->obj[0].setParent(&this->line[6]);
@@ -210,15 +224,17 @@ void GlutProgram::onIdle(void) {
 
 	this->camera.update();
 	
-	this->line[0].rotateY(0.1f);
-	
-	this->cube[0].rotateY(0.5f);
-	this->cube[1].rotateY(0.2f);
+	if(this->rotateMobile) {
+		this->line[0].rotateY(0.1f);
 		
-	this->triangle[0].rotateX(0.2f);
-	this->triangle[1].rotateX(0.5f);
-	
- 	this->obj[0].rotateY(1.0f);
+		this->cube[0].rotateY(0.5f);
+		this->cube[1].rotateY(0.2f);
+			
+		this->triangle[0].rotateX(0.2f);
+		this->triangle[1].rotateX(0.5f);
+		
+		this->obj[0].rotateY(1.0f);
+	}
 
 	glutPostRedisplay();
 }
@@ -241,6 +257,9 @@ void GlutProgram::onKeyboardInput(unsigned char key, int x, int y) {
 			break;
 		case 'r':
 			this->camera.toggleAutoRotate();
+			break;
+		case 't':
+			this->rotateMobile = !this->rotateMobile;
 			break;
 		case 'm':
 			this->directionalLight.ambientIntensity += 0.05f;

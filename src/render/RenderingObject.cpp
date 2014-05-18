@@ -15,6 +15,8 @@ void RenderingObject::init(ShaderProgram *shaderProgramm) {
 
 	// init uniform variables
 	this->modelUniform = shaderProgramm->getUniformLocation("ModelMatrix");
+	this->specularIntensityUniform = shaderProgramm->getUniformLocation("materialSpecularIntensity");
+	this->specularPowerUniform = shaderProgramm->getUniformLocation("materialSpecularPower");
 	
 	/* initialize temp matrices */
 	this->translationMatrix = glm::mat4(1.0f);
@@ -25,8 +27,13 @@ void RenderingObject::init(ShaderProgram *shaderProgramm) {
 	
 	// set rendering type
 	this->renderingMode = GL_TRIANGLES;
+	
 	//set no parent
 	this->parent = NULL;
+	
+	//set material behaviour
+	this->specularPower = 0.0f;
+	this->specularIntensity = 0.0f;
 }
 
 void RenderingObject::setParent(RenderingObject *parent){
@@ -108,6 +115,36 @@ void RenderingObject::translate(float x, float y, float z) {
 	this->translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z)) * this->translationMatrix;
 }
 
+// see http://www.opengl.org/wiki/Calculating_a_Surface_Normal
+// very helpful!
+void RenderingObject::calcNormals(void) {
+	for( uint i = 0; i < this->IBO_data.size(); i++ ) {
+		// get the three vertices that make the faces
+		glm::vec3 p1 = this->VBO_data[this->IBO_data[i].x];
+		glm::vec3 p2 = this->VBO_data[this->IBO_data[i].y];
+		glm::vec3 p3 = this->VBO_data[this->IBO_data[i].z];
+
+		glm::vec3 v1 = p2 - p1;
+		glm::vec3 v2 = p3 - p1;
+		glm::vec3 normal = glm::normalize(glm::cross(v1, v2));
+
+		// Store the face's normal for each of the vertices that make up the face.
+		this->NORMALS_data.push_back( normal );
+	}
+	
+	glGenBuffers(1, &this->NORMALS);
+	glBindBuffer(GL_ARRAY_BUFFER, this->NORMALS);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * this->NORMALS_data.size(), &this->NORMALS_data[0], GL_STATIC_DRAW);
+}
+
+void RenderingObject::setMatSpecularIntensity(float intensity) {
+	this->specularIntensity = intensity;
+}
+
+void RenderingObject::setMatSpecularPower(float power) {
+	this->specularPower = power;
+}
+
 void RenderingObject::render(void) {
 	// set buffers
 	glEnableVertexAttribArray(S_POSITION);
@@ -118,6 +155,12 @@ void RenderingObject::render(void) {
 	glBindBuffer(GL_ARRAY_BUFFER, this->CBO);
 	glVertexAttribPointer(S_COLOR, 3, GL_FLOAT,GL_FALSE, 0, 0);   
 
+	if(this->renderingMode == GL_TRIANGLES) { // we do not calculate normals for lines... to much work ;)
+		glEnableVertexAttribArray(S_NORMALS);
+		glBindBuffer(GL_ARRAY_BUFFER, this->NORMALS);
+		glVertexAttribPointer(S_NORMALS, 3, GL_FLOAT,GL_FALSE, 0, 0);
+	}
+	
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->IBO);
 	GLint size; 
 	glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
@@ -132,6 +175,8 @@ void RenderingObject::render(void) {
 
 	// set uniform variables
 	glUniformMatrix4fv(this->modelUniform, 1, GL_FALSE, glm::value_ptr(this->renderingModelMatrix));
+	glUniform1f(this->specularIntensityUniform, this->specularIntensity);
+	glUniform1f(this->specularPowerUniform, this->specularPower);
 
 	// draw
 	glDrawElements(this->renderingMode, size/sizeof(GLushort), GL_UNSIGNED_SHORT, 0);

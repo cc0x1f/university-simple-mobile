@@ -22,14 +22,18 @@
 
 struct DirectionalLight
 {
-    glm::vec3 color;
-    float ambientIntensity;
+	glm::vec3 color;
+	glm::vec3 position;
+	float ambientIntensity;
+	float diffuseIntensity;
 };
 
 class Lightsource {
 	private:
 		GLint directionalLightColorUniform;
+		GLint directionalLightPositionUniform;
 		GLint directionalLightAmbientIntensityUniform;
+		GLint directionalLightDiffuseIntensityUniform;
 	public:
 		void init(ShaderProgram *shaderProgramm);
 		void setDirectionalLight(const DirectionalLight& light);

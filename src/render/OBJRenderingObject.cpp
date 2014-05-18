@@ -25,4 +25,6 @@ void OBJRenderingObject::initVertices(const char* filename, glm::vec3 color) {
     for(i=0; i < this->data.face_count; i++) {
 		this->IBO_data.push_back(Helper::vec3s((GLushort)(*this->data.face_list[i]).vertex_index[0],(GLushort)(*this->data.face_list[i]).vertex_index[1],(GLushort)(*this->data.face_list[i]).vertex_index[2]));
     }
+    
+    this->calcNormals();
 }

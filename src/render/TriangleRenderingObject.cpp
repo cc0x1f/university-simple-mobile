@@ -11,4 +11,6 @@ void TriangleRenderingObject::initVertices(void) {
 	this->CBO_data.push_back(glm::vec3(0.0,  1.0,  1.0));
 
 	this->IBO_data.push_back(Helper::vec3s(0, 1, 2));
+	
+	this->calcNormals();
 }

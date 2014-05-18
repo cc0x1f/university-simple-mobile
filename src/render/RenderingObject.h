@@ -26,10 +26,12 @@ class RenderingObject {
 		GLuint VBO;
 		GLuint CBO;
 		GLuint IBO;
+		GLuint NORMALS;
 		
 		RenderingObject *parent;
 
 		std::vector<glm::vec3> VBO_data;
+		std::vector<glm::vec3> NORMALS_data;
 		std::vector<glm::vec3> CBO_data;
 		std::vector<Helper::vec3s> IBO_data;
 
@@ -41,7 +43,12 @@ class RenderingObject {
 		glm::mat4 translationMatrix;
 
 		GLint modelUniform;
+		GLuint specularIntensityUniform;
+		GLuint specularPowerUniform;
+		
 		GLenum renderingMode;
+		float specularIntensity;
+		float specularPower;
 
 		void calculateModelMatrix(void);
 	public:
@@ -58,6 +65,9 @@ class RenderingObject {
 		void translateY(float y);
 		void translateZ(float z);
 		void translate(float x, float y, float z);
+		void calcNormals();
+		void setMatSpecularIntensity(float intensity);
+		void setMatSpecularPower(float power);
 		glm::mat4 getRenderingMatrix(void);
 		glm::mat4 getRotationMatrix(void);
 		glm::mat4 getScaleMatrix(void);

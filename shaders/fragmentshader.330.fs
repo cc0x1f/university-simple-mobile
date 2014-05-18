@@ -1,16 +1,12 @@
 #version 330
-
+#pragma optimize (off)
+// Input data from our vertex shader
 in vec4 vColor;
-out vec4 FragColor;
 
-struct DirectionalLight
-{
-  vec3 color;
-  float ambientIntensity;
-};
-uniform DirectionalLight gDirectionalLight;
+// Output data 
+out vec4 FragColor;
 
 void main()
 {
-  FragColor = vColor * vec4(gDirectionalLight.color, 1.0f) * gDirectionalLight.ambientIntensity;
+	FragColor = vColor;
 }

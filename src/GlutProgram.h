@@ -35,6 +35,7 @@ class GlutProgram {
 		int height;
 		int posX;
 		int posY;
+		bool rotateMobile;
 		const char *title;
 		ShaderProgram shaderProgram;
 		Camera camera;
