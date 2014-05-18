@@ -5,7 +5,7 @@
 /* Standard includes */
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <string>
 
 /* OpenGL includes */
 #include <GL/glew.h>
@@ -40,8 +40,10 @@ class Lightsource {
 		GLint directionalLightUseAmbientUniform;
 		GLint directionalLightUseDiffuseUniform;
 		GLint directionalLightUseSpecularUniform;
+		
+		int id;
 	public:
-		void init(ShaderProgram *shaderProgramm);
+		void init(ShaderProgram *shaderProgramm, int id);
 		void setDirectionalLight(const DirectionalLight& light);
 };
 

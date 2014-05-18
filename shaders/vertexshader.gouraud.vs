@@ -1,6 +1,8 @@
 #version 330
 #pragma optimize (off)
 
+#define LIGHTS 2
+
 // struct for our lightsource
 struct DirectionalLight
 {
@@ -17,7 +19,7 @@ struct DirectionalLight
 uniform mat4 ProjectionMatrix;
 uniform mat4 ViewMatrix;
 uniform mat4 ModelMatrix;
-uniform DirectionalLight gDirectionalLight;
+uniform DirectionalLight gDirectionalLight[LIGHTS];
 uniform float materialSpecularIntensity;                                                
 uniform float materialSpecularPower;
 
@@ -34,6 +36,7 @@ void main()
 	vec4 diffuseColor;
 	vec4 specularColor;
 	vec4 ambientColor;
+	vec4 completeColor = vec4(0, 0, 0, 0);
 	
 	vec4 vertexPosition = ModelMatrix * vec4(Position, 1.0);
 	
@@ -43,37 +46,43 @@ void main()
 	// Normal of the the vertex, in camera space
 	vec3 normalDirection = normalize((ModelMatrix * vec4(Normal, 0.0)).xyz);
 	vec3 viewDirection = normalize(vec3(0,0,0) - (ViewMatrix * vertexPosition).xyz);
-	vec3 lightDirection = normalize(gDirectionalLight.position - vec3(vertexPosition));
-	vec3 reflectDirection = normalize(reflect(-lightDirection, normalDirection));
+	
 
-	// Calculate lightning colors
-	ambientColor = vec4(gDirectionalLight.color, 1.0f) * gDirectionalLight.ambientIntensity;
-	diffuseColor  = vec4(0, 0, 0, 0);                                   
-	specularColor = vec4(0, 0, 0, 0);
+	for (int light= 0; light < LIGHTS; light++) {
+		vec3 lightDirection = normalize(gDirectionalLight[light].position - vec3(vertexPosition));
+		vec3 reflectDirection = normalize(reflect(-lightDirection, normalDirection));
+	
+		// Calculate lightning colors
+		ambientColor = vec4(gDirectionalLight[light].color, 1.0f) * gDirectionalLight[light].ambientIntensity;
+		diffuseColor  = vec4(0, 0, 0, 0);                                   
+		specularColor = vec4(0, 0, 0, 0);
 
-	float diffuseFactor = dot(normalDirection, lightDirection);
-	if (diffuseFactor > 0) {
-		diffuseColor = vec4(gDirectionalLight.color, 1.0f) * gDirectionalLight.diffuseIntensity * diffuseFactor;
+		float diffuseFactor = dot(normalDirection, lightDirection);
+		if (diffuseFactor > 0) {
+			diffuseColor = vec4(gDirectionalLight[light].color, 1.0f) * gDirectionalLight[light].diffuseIntensity * diffuseFactor;
 
-		float specularFactor = dot(viewDirection, reflectDirection);
-		specularFactor = pow(specularFactor, materialSpecularPower);
-		if (specularFactor > 0) {
-			specularColor = vec4(gDirectionalLight.color, 1.0f) * materialSpecularIntensity * specularFactor;
+			float specularFactor = dot(viewDirection, reflectDirection);
+			specularFactor = pow(specularFactor, materialSpecularPower);
+			if (specularFactor > 0) {
+				specularColor = vec4(gDirectionalLight[light].color, 1.0f) * materialSpecularIntensity * specularFactor;
+			}
 		}
-	}
-	
-	if (gDirectionalLight.useDiffuse < 0.5) {
-		diffuseColor  = vec4(0, 0, 0, 0);
-	}
-	
-	if (gDirectionalLight.useAmbient < 0.5) {
-		ambientColor  = vec4(0, 0, 0, 0);
-	}
-	
-	if (gDirectionalLight.useSpecular < 0.5) {
-		specularColor  = vec4(0, 0, 0, 0);
+		
+		if (gDirectionalLight[light].useDiffuse < 0.5) {
+			diffuseColor  = vec4(0, 0, 0, 0);
+		}
+		
+		if (gDirectionalLight[light].useAmbient < 0.5) {
+			ambientColor  = vec4(0, 0, 0, 0);
+		}
+		
+		if (gDirectionalLight[light].useSpecular < 0.5) {
+			specularColor  = vec4(0, 0, 0, 0);
+		}
+		
+		completeColor = completeColor + (ambientColor + diffuseColor  + specularColor);
 	}
 	
 	// the color of the vertex
-	vColor = Color * (ambientColor + diffuseColor  + specularColor);
+	vColor = Color * completeColor;
 }

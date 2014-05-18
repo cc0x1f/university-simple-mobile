@@ -87,16 +87,26 @@ void GlutProgram::initScene(void) {
 	this->camera.rotateY(-45);
 	this->camera.translateZ(-2.0f);
 	
-	// init lightsource
-	this->lightSource.init(&this->shaderProgram);
-	this->directionalLight.position = glm::vec3(4.0f, 4.0f, 10.0f);
-	this->directionalLight.color = glm::vec3(1.0f, 1.0f, 1.0f);
-    this->directionalLight.ambientIntensity = 0.5f;
-	this->directionalLight.diffuseIntensity = 0.7f;
-	this->directionalLight.useAmbient = 1;
-	this->directionalLight.useDiffuse = 1;
-	this->directionalLight.useSpecular = 1;
-	this->lightSource.setDirectionalLight(this->directionalLight);
+	// init lightsources
+	this->lightSources[0].init(&this->shaderProgram, 0);
+	this->directionalLights[0].position = glm::vec3(4.0f, 4.0f, 10.0f);
+	this->directionalLights[0].color = glm::vec3(1.0f, 1.0f, 1.0f);
+    this->directionalLights[0].ambientIntensity = 0.5f;
+	this->directionalLights[0].diffuseIntensity = 0.7f;
+	this->directionalLights[0].useAmbient = 1;
+	this->directionalLights[0].useDiffuse = 1;
+	this->directionalLights[0].useSpecular = 1;
+	this->lightSources[0].setDirectionalLight(this->directionalLights[0]);
+	
+	this->lightSources[1].init(&this->shaderProgram, 1);
+	this->directionalLights[1].position = glm::vec3(-1.0f, 0.0f, 0.0f);
+	this->directionalLights[1].color = glm::vec3(0.0f, 0.0f, 1.0f); // a second blue light ;)
+    this->directionalLights[1].ambientIntensity = 0.0f;
+	this->directionalLights[1].diffuseIntensity = 0.4f;
+	this->directionalLights[1].useAmbient = 0;
+	this->directionalLights[1].useDiffuse = 1;
+	this->directionalLights[1].useSpecular = 1;
+	this->lightSources[1].setDirectionalLight(this->directionalLights[1]);
 	
 	// init rendering cubes
 	// left cube
@@ -216,7 +226,6 @@ void GlutProgram::onDisplay(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	this->camera.render();
-	this->lightSource.setDirectionalLight(this->directionalLight);
 	
 	// rendering hirarchie
 	this->line[0].render();
@@ -270,9 +279,9 @@ void GlutProgram::onKeyboardInput(unsigned char key, int x, int y) {
 	printf("Input event received: %c\n", key);
 	fflush(stdout);
 #endif
-	float oldR = this->directionalLight.color.x;
-	float oldG = this->directionalLight.color.y;
-	float oldB = this->directionalLight.color.z;
+	float oldR = this->directionalLights[0].color.x;
+	float oldG = this->directionalLights[0].color.y;
+	float oldB = this->directionalLights[0].color.z;
 	
 	switch (key) {
 		case 27:
@@ -286,10 +295,10 @@ void GlutProgram::onKeyboardInput(unsigned char key, int x, int y) {
 			this->rotateMobile = !this->rotateMobile;
 			break;
 		case 'm':
-			this->directionalLight.ambientIntensity += 0.05f;
+			this->directionalLights[0].ambientIntensity += 0.05f;
 			break;
 		case 'n':
-			this->directionalLight.ambientIntensity -= 0.05f;
+			this->directionalLights[0].ambientIntensity -= 0.05f;
 			break;
 		case 'i':
 			this->camera.translateZ(1.0f);
@@ -305,8 +314,8 @@ void GlutProgram::onKeyboardInput(unsigned char key, int x, int y) {
 				oldR = 0;
 			}
 			
-			this->directionalLight.color = glm::vec3(oldR, oldG, oldB);
-			this->lightSource.setDirectionalLight(this->directionalLight);
+			this->directionalLights[0].color = glm::vec3(oldR, oldG, oldB);
+			this->lightSources[0].setDirectionalLight(this->directionalLights[0]);
 			break;
 		case '2':
 			oldG += 0.34f;
@@ -315,8 +324,8 @@ void GlutProgram::onKeyboardInput(unsigned char key, int x, int y) {
 				oldG = 0;
 			}
 			
-			this->directionalLight.color = glm::vec3(oldR, oldG, oldB);
-			this->lightSource.setDirectionalLight(this->directionalLight);
+			this->directionalLights[0].color = glm::vec3(oldR, oldG, oldB);
+			this->lightSources[0].setDirectionalLight(this->directionalLights[0]);
 			break;
 		case '3':
 			oldB += 0.34f;
@@ -325,21 +334,21 @@ void GlutProgram::onKeyboardInput(unsigned char key, int x, int y) {
 				oldB = 0;
 			}
 			
-			this->directionalLight.color = glm::vec3(oldR, oldG, oldB);
-			this->lightSource.setDirectionalLight(this->directionalLight);
+			this->directionalLights[0].color = glm::vec3(oldR, oldG, oldB);
+			this->lightSources[0].setDirectionalLight(this->directionalLights[0]);
 			break;
 		// enable lightning parts
 		case 'a':
-			this->directionalLight.useAmbient = glm::abs(1 - this->directionalLight.useAmbient);
-			this->lightSource.setDirectionalLight(this->directionalLight);
+			this->directionalLights[0].useAmbient = glm::abs(1 - this->directionalLights[0].useAmbient);
+			this->lightSources[0].setDirectionalLight(this->directionalLights[0]);
 			break;
 		case 'd':
-			this->directionalLight.useDiffuse = glm::abs(1 - this->directionalLight.useDiffuse);
-			this->lightSource.setDirectionalLight(this->directionalLight);
+			this->directionalLights[0].useDiffuse = glm::abs(1 - this->directionalLights[0].useDiffuse);
+			this->lightSources[0].setDirectionalLight(this->directionalLights[0]);
 			break;
 		case 's':
-			this->directionalLight.useSpecular = glm::abs(1 - this->directionalLight.useSpecular);
-			this->lightSource.setDirectionalLight(this->directionalLight);
+			this->directionalLights[0].useSpecular = glm::abs(1 - this->directionalLights[0].useSpecular);
+			this->lightSources[0].setDirectionalLight(this->directionalLights[0]);
 			break;
 		default:
 			break;

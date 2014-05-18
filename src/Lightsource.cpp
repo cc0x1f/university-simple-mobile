@@ -1,15 +1,19 @@
  
 #include "Lightsource.h" 
 
-void Lightsource::init(ShaderProgram *shaderProgramm) {
+void Lightsource::init(ShaderProgram *shaderProgramm, int id) {
+	this->id = id;
+
+	std::string base = "gDirectionalLight[" + std::to_string(this->id) + "]."; // WARNING: std::to_string requires std=c++11 !
+
 	// init uniform variables
-	this->directionalLightColorUniform = shaderProgramm->getUniformLocation("gDirectionalLight.color");
-	this->directionalLightPositionUniform = shaderProgramm->getUniformLocation("gDirectionalLight.position");
-	this->directionalLightAmbientIntensityUniform = shaderProgramm->getUniformLocation("gDirectionalLight.ambientIntensity");
-	this->directionalLightDiffuseIntensityUniform = shaderProgramm->getUniformLocation("gDirectionalLight.diffuseIntensity");
-	this->directionalLightUseAmbientUniform = shaderProgramm->getUniformLocation("gDirectionalLight.useAmbient");
-	this->directionalLightUseDiffuseUniform = shaderProgramm->getUniformLocation("gDirectionalLight.useDiffuse");
-	this->directionalLightUseSpecularUniform = shaderProgramm->getUniformLocation("gDirectionalLight.useSpecular");
+	this->directionalLightColorUniform = shaderProgramm->getUniformLocation((base + "color").c_str());
+	this->directionalLightPositionUniform = shaderProgramm->getUniformLocation((base + "position").c_str());
+	this->directionalLightAmbientIntensityUniform = shaderProgramm->getUniformLocation((base + "ambientIntensity").c_str());
+	this->directionalLightDiffuseIntensityUniform = shaderProgramm->getUniformLocation((base + "diffuseIntensity").c_str());
+	this->directionalLightUseAmbientUniform = shaderProgramm->getUniformLocation((base + "useAmbient").c_str());
+	this->directionalLightUseDiffuseUniform = shaderProgramm->getUniformLocation((base + "useDiffuse").c_str());
+	this->directionalLightUseSpecularUniform = shaderProgramm->getUniformLocation((base + "useSpecular").c_str());
 }
 
 void Lightsource::setDirectionalLight(const DirectionalLight& light) {

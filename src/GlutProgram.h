@@ -45,11 +45,11 @@ class GlutProgram {
 		OBJRenderingObject ball[1];
 		OBJRenderingObject teapot[1];
 		
-		//light source, handles all lights
-		Lightsource lightSource;
+		//light sources
+		Lightsource lightSources[2];
 		
 		// light types for the light source
-		DirectionalLight directionalLight;
+		DirectionalLight directionalLights[2];
 
 		// GLUT needs those static functions...
 		static void onDisplayWrapper(void){
