@@ -1,0 +1,15 @@
+# OBJ file created by ply_to_obj.c
+#
+
+v  -1  -1  -1
+v  1  -1  -1
+v  1  1  -1
+v  -1  1  -1
+v  0.0  0.0  2
+
+f  4  1  2
+f  3  4  2
+f  5  2  1
+f  4  5  1
+f  3  5  4
+f  5  3  2 

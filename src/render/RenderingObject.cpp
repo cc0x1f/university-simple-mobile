@@ -118,6 +118,10 @@ void RenderingObject::translate(float x, float y, float z) {
 // see http://www.opengl.org/wiki/Calculating_a_Surface_Normal
 // very helpful!
 void RenderingObject::calcNormals(void) {
+	
+	this->NORMALS_data.resize(this->VBO_data.size());
+	
+	// iterate over each face
 	for( uint i = 0; i < this->IBO_data.size(); i++ ) {
 		// get the three vertices that make the faces
 		glm::vec3 p1 = this->VBO_data[this->IBO_data[i].x];
@@ -129,7 +133,9 @@ void RenderingObject::calcNormals(void) {
 		glm::vec3 normal = glm::normalize(glm::cross(v1, v2));
 
 		// Store the face's normal for each of the vertices that make up the face.
-		this->NORMALS_data.push_back( normal );
+		this->NORMALS_data[this->IBO_data[i].x] = normal;
+		this->NORMALS_data[this->IBO_data[i].y] = normal;
+		this->NORMALS_data[this->IBO_data[i].z] = normal;
 	}
 	
 	glGenBuffers(1, &this->NORMALS);

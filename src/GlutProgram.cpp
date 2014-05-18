@@ -96,7 +96,7 @@ void GlutProgram::initScene(void) {
 	
 	// init rendering cubes
 	// left cube
-	this->cube[0].initVertices(glm::vec3(1.0f,0.0f,0.0f));
+	this->cube[0].initVertices("models/cube.obj", glm::vec3(1.0f,0.0f,0.0f));
 	this->cube[0].init(&this->shaderProgram);
 	this->cube[0].setMatSpecularIntensity(1.0f);
 	this->cube[0].setMatSpecularPower(100.0f);
@@ -104,7 +104,7 @@ void GlutProgram::initScene(void) {
 	this->cube[0].translate(0.0f, 2.0f, 0.0f);
 	this->cube[0].setParent(&this->line[2]);
 	// right cube
-	this->cube[1].initVertices(glm::vec3(0.0f,1.0f,0.0f));
+	this->cube[1].initVertices("models/cube.obj", glm::vec3(0.0f,1.0f,0.0f));
 	this->cube[1].init(&this->shaderProgram);
 	this->cube[1].setMatSpecularIntensity(1.0f);
 	this->cube[1].setMatSpecularPower(50.0f);
@@ -113,32 +113,33 @@ void GlutProgram::initScene(void) {
 	this->cube[1].scale(0.6f);
 	this->cube[1].setParent(&this->line[3]);
 	
-	// init rendering triangles
-	// left triangle
-	this->triangle[0].initVertices();
-	this->triangle[0].init(&this->shaderProgram);
-	this->triangle[0].setMatSpecularIntensity(1.0f);
-	this->triangle[0].setMatSpecularPower(32.0f);
-	this->triangle[0].translate(-0.25f, 1.0f, 0.0f);
-	this->triangle[0].rotateZ(-90);
-	this->triangle[0].setParent(&this->line[5]);
-	// right triangle
-	this->triangle[1].initVertices();
-	this->triangle[1].init(&this->shaderProgram);
-	this->triangle[1].setMatSpecularIntensity(1.0f);
-	this->triangle[1].setMatSpecularPower(32.0f);
-	this->triangle[1].translate(-0.25f, 0.0f, 0.0f);
-	this->triangle[1].rotateZ(-90);
-	this->triangle[1].setParent(&this->line[5]);
+	// init rendering pyramids
+	// left pyramid
+	this->pyramid[0].initVertices("models/pyramid.obj", glm::vec3(0.0f,0.0f,1.0f));
+	this->pyramid[0].init(&this->shaderProgram);
+	this->pyramid[0].setMatSpecularIntensity(1.0f);
+	this->pyramid[0].setMatSpecularPower(32.0f);
+	this->pyramid[0].translate(-0.5f, 1.0f, 0.0f);
+	this->pyramid[0].rotateY(90);
+	this->pyramid[0].setParent(&this->line[5]);
+	// right ball
+	this->ball[0].initVertices("models/ball.obj", glm::vec3(1.0f,0.3f,0.6f));
+	this->ball[0].init(&this->shaderProgram);
+	this->ball[0].setMatSpecularIntensity(1.0f);
+	this->ball[0].setMatSpecularPower(32.0f);
+	this->ball[0].scale(0.2f);
+	this->ball[0].translate(-0.25f, 0.0f, 0.0f);
+	this->ball[0].rotateZ(-90);
+	this->ball[0].setParent(&this->line[5]);
 	
-	// init rendering obj-objects
-	this->obj[0].initVertices("models/teapot.obj", glm::vec3(0.7f,0.7f,0.7f)); // grey teapot
-	this->obj[0].init(&this->shaderProgram);
-	this->obj[0].setMatSpecularIntensity(1.0f);
-	this->obj[0].setMatSpecularPower(80.0f);
-	this->obj[0].translate(0.0f, -0.75f, 0.0f);
-	this->obj[0].scale(0.5f);
-	this->obj[0].setParent(&this->line[6]);
+	// init rendering teapot-objects
+	this->teapot[0].initVertices("models/teapot.obj", glm::vec3(0.7f,0.7f,0.7f)); // grey teapot
+	this->teapot[0].init(&this->shaderProgram);
+	this->teapot[0].setMatSpecularIntensity(1.0f);
+	this->teapot[0].setMatSpecularPower(80.0f);
+	this->teapot[0].translate(0.0f, -0.75f, 0.0f);
+	this->teapot[0].scale(0.5f);
+	this->teapot[0].setParent(&this->line[6]);
 	
 	// background grids
 	this->grid[0].initVertices(10,10, glm::vec3(1.0,0.0,0.0));
@@ -199,8 +200,8 @@ void GlutProgram::initScene(void) {
 	this->line[6].initVertices(glm::vec3(1.0,1.0,1.0));
 	this->line[6].init(&this->shaderProgram);
 	this->line[6].scale(1);
-	this->line[6].translate(0.0f,-2.0f,0.0f);
-	this->line[6].setParent(&this->triangle[1]);
+	this->line[6].translate(0.0f,-9.5f,0.0f);
+	this->line[6].setParent(&this->ball[0]);
 }
 
 void GlutProgram::run(void) {
@@ -223,10 +224,10 @@ void GlutProgram::onDisplay(void) {
 				this->cube[1].render();
 					this->line[4].render();
 						this->line[5].render();
-							this->triangle[0].render();
-							this->triangle[1].render();
+							this->pyramid[0].render();
+							this->ball[0].render();
 								this->line[6].render();
-									this->obj[0].render();
+									this->teapot[0].render();
 
 	int i;
 	for(i = 0; i < 3; i++) {
@@ -247,10 +248,10 @@ void GlutProgram::onIdle(void) {
 		this->cube[0].rotateY(0.05f);
 		this->cube[1].rotateY(0.02f);
 			
-		this->triangle[0].rotateX(0.02f);
-		this->triangle[1].rotateX(0.05f);
+		//this->pyramid[0].rotateX(0.02f);
+		this->ball[0].rotateX(0.05f);
 		
-		this->obj[0].rotateY(0.03f);
+		this->teapot[0].rotateY(0.03f);
 	}
 
 	glutPostRedisplay();
