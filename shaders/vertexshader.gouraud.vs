@@ -39,7 +39,7 @@ void main()
 	
 	// Normal of the the vertex, in camera space
 	vec3 normalDirection = normalize((ModelMatrix * vec4(Normal, 0.0)).xyz);
-	vec3 viewDirection = normalize(vec3(0,0,0) - (ViewMatrix * ModelMatrix * vec4(Position,1)).xyz);
+	vec3 viewDirection = normalize(vec3(0,0,0) - (ViewMatrix * vertexPosition).xyz);
 	vec3 lightDirection = normalize(gDirectionalLight.position - vec3(vertexPosition));
 	vec3 reflectDirection = normalize(reflect(-lightDirection, normalDirection));
 
