@@ -51,8 +51,25 @@ void GlutProgram::init(int *argc, char **argv) {
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
-	this->shaderProgram.setVertexShader("shaders/vertexshader.330.vs");
-	this->shaderProgram.setFragmentShader("shaders/fragmentshader.330.fs");
+	this->useGouraud = true;
+	
+	if(*argc > 1) {
+		if(strncmp(argv[1], "g", 1) == 0){
+			this->useGouraud = true;
+		} else if (strncmp(argv[1], "p", 1) == 0) {
+			this->useGouraud = false;
+		} else {
+			printf("Incorrect argument, using Gourard shading!\n");
+		}
+	}
+	
+	if(this->useGouraud) {
+		this->shaderProgram.setVertexShader("shaders/vertexshader.gouraud.vs");
+		this->shaderProgram.setFragmentShader("shaders/fragmentshader.gouraud.fs");
+	} else {
+		this->shaderProgram.setVertexShader("shaders/vertexshader.phong.vs");
+		this->shaderProgram.setFragmentShader("shaders/fragmentshader.phong.fs");
+	}
 	
 	this->shaderProgram.create();
 	
@@ -71,7 +88,7 @@ void GlutProgram::initScene(void) {
 	
 	// init lightsource
 	this->lightSource.init(&this->shaderProgram);
-	this->directionalLight.position = glm::vec3(4.0f, 4.0f, 4.0f);
+	this->directionalLight.position = glm::vec3(4.0f, 4.0f, 10.0f);
 	this->directionalLight.color = glm::vec3(1.0f, 1.0f, 1.0f);
     this->directionalLight.ambientIntensity = 0.2f;
 	this->directionalLight.diffuseIntensity = 0.5f;
@@ -82,7 +99,7 @@ void GlutProgram::initScene(void) {
 	this->cube[0].initVertices(glm::vec3(1.0f,0.0f,0.0f));
 	this->cube[0].init(&this->shaderProgram);
 	this->cube[0].setMatSpecularIntensity(1.0f);
-	this->cube[0].setMatSpecularPower(32.0f);
+	this->cube[0].setMatSpecularPower(100.0f);
 	this->cube[0].scale(1);
 	this->cube[0].translate(0.0f, 2.0f, 0.0f);
 	this->cube[0].setParent(&this->line[2]);
@@ -90,7 +107,7 @@ void GlutProgram::initScene(void) {
 	this->cube[1].initVertices(glm::vec3(0.0f,1.0f,0.0f));
 	this->cube[1].init(&this->shaderProgram);
 	this->cube[1].setMatSpecularIntensity(1.0f);
-	this->cube[1].setMatSpecularPower(10.0f);
+	this->cube[1].setMatSpecularPower(50.0f);
 	this->cube[1].rotate(45, glm::vec3(1.0,0.0,0.0));
 	this->cube[1].translate(0.0f, 1.0f, 0.0f);
 	this->cube[1].scale(0.6f);
@@ -118,7 +135,7 @@ void GlutProgram::initScene(void) {
 	this->obj[0].initVertices("models/teapot.obj", glm::vec3(0.7f,0.7f,0.7f)); // grey teapot
 	this->obj[0].init(&this->shaderProgram);
 	this->obj[0].setMatSpecularIntensity(1.0f);
-	this->obj[0].setMatSpecularPower(32.0f);
+	this->obj[0].setMatSpecularPower(80.0f);
 	this->obj[0].translate(0.0f, -0.75f, 0.0f);
 	this->obj[0].scale(0.5f);
 	this->obj[0].setParent(&this->line[6]);
@@ -225,15 +242,15 @@ void GlutProgram::onIdle(void) {
 	this->camera.update();
 	
 	if(this->rotateMobile) {
-		this->line[0].rotateY(0.1f);
+		this->line[0].rotateY(0.01f);
 		
-		this->cube[0].rotateY(0.5f);
-		this->cube[1].rotateY(0.2f);
+		this->cube[0].rotateY(0.05f);
+		this->cube[1].rotateY(0.02f);
 			
-		this->triangle[0].rotateX(0.2f);
-		this->triangle[1].rotateX(0.5f);
+		this->triangle[0].rotateX(0.02f);
+		this->triangle[1].rotateX(0.05f);
 		
-		this->obj[0].rotateY(1.0f);
+		this->obj[0].rotateY(0.03f);
 	}
 
 	glutPostRedisplay();

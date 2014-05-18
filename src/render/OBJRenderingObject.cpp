@@ -27,4 +27,13 @@ void OBJRenderingObject::initVertices(const char* filename, glm::vec3 color) {
     }
     
     this->calcNormals();
+	
+	#ifdef DEBUG
+	for(uint i=0; i< 100; i++) {
+		printf("%d:\t%f,%f,%f\n", i, this->NORMALS_data.at(i).x, this->NORMALS_data.at(i).y, this->NORMALS_data.at(i).z);
+	}
+
+	printf("Printed OBJ normals!\n");
+	fflush(stdout);
+	#endif
 }

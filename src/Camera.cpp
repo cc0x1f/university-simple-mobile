@@ -99,7 +99,7 @@ void Camera::translate(float x, float y, float z) {
 void Camera::update(void) {    
 	// rotate the cam
 	if(this->autoRotate == true) {
-		this->rotateY(0.1f);
+		this->rotateY(0.01f);
 	}
 }
 

@@ -36,6 +36,7 @@ class GlutProgram {
 		int posX;
 		int posY;
 		bool rotateMobile;
+		bool useGouraud;
 		const char *title;
 		ShaderProgram shaderProgram;
 		Camera camera;

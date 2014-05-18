@@ -32,23 +32,28 @@ void main()
 	vec4 specularColor;
 	vec4 ambientColor;
 	
+	vec4 vertexPosition = ModelMatrix * vec4(Position, 1.0);
+	
 	// Output position of the vertex, in clip space : MVP * position
-	gl_Position = ProjectionMatrix*ViewMatrix*ModelMatrix*vec4(Position, 1.0);
+	gl_Position = ProjectionMatrix * ViewMatrix * vertexPosition;
 	
 	// Normal of the the vertex, in camera space
-	vec3 normal = normalize(( ViewMatrix * vec4(Normal,0)).xyz);
+	vec3 normalDirection = normalize((ModelMatrix * vec4(Normal, 0)).xyz);
+	vec3 viewDirection = normalize(vec3(inverse(ViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) - vertexPosition));
+	vec3 lightDirection = normalize(gDirectionalLight.position - vec3(vertexPosition));
 
 	// Calculate lightning colors
 	ambientColor = vec4(gDirectionalLight.color, 1.0f) * gDirectionalLight.ambientIntensity;
 	diffuseColor  = vec4(0, 0, 0, 0);                                   
 	specularColor = vec4(0, 0, 0, 0);
 
-	float diffuseFactor = dot(normalize(normal), -gDirectionalLight.position);
+	vec3 reflectDirection = reflect(-lightDirection, normalDirection);
+	float diffuseFactor = clamp(dot(viewDirection, reflectDirection), 0, 1);
 	if (diffuseFactor > 0) {
 		diffuseColor = vec4(gDirectionalLight.color, 1.0f) * gDirectionalLight.diffuseIntensity * diffuseFactor;
 
 		vec3 vertexToEye = normalize(vec3(0,0,0) - (ViewMatrix * ModelMatrix * vec4(Position,1)).xyz);
-		vec3 lightReflect = normalize(reflect(gDirectionalLight.position, normal));
+		vec3 lightReflect = normalize(reflect(gDirectionalLight.position, normalDirection));
 		float specularFactor = dot(vertexToEye, lightReflect);
 		specularFactor = pow(specularFactor, materialSpecularPower);
 		if (specularFactor > 0) {

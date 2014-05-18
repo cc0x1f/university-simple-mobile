@@ -31,12 +31,12 @@ void CubeRenderingObject::initVertices(glm::vec3 color) {
 	
 	this->calcNormals();
 	
-	#ifdef DEBUG
+#ifdef DEBUG
 	for(uint i=0; i< this->NORMALS_data.size(); i++) {
 		printf("%d:\t%f,%f,%f\n", i, this->NORMALS_data.at(i).x, this->NORMALS_data.at(i).y, this->NORMALS_data.at(i).z);
 	}
 
 	printf("Printed cube normals!\n");
 	fflush(stdout);
-	#endif
+#endif
 }
