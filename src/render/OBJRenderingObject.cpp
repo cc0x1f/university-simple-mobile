@@ -1,4 +1,4 @@
-#include "OBJRenderingObject.h"
+#include "../../header/render/OBJRenderingObject.h"
 
 void OBJRenderingObject::setColor(glm::vec3 color) {
 	this->color = color;

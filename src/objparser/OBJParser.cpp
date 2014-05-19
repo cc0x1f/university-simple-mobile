@@ -17,7 +17,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "OBJParser.h"
+#include "../../header/objparser/OBJParser.h"
 #define WHITESPACE " \t\n\r"
 
 

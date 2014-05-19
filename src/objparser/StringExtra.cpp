@@ -13,7 +13,7 @@
 *
 *******************************************************************/
 
-#include "StringExtra.h"
+#include "../../header/objparser/StringExtra.h"
 
 
 char strequal(const char *s1, const char *s2)

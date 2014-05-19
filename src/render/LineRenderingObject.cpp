@@ -1,4 +1,4 @@
-#include "LineRenderingObject.h" 
+#include "../../header/render/LineRenderingObject.h"
 
 void LineRenderingObject::initVertices(glm::vec3 color) {
 	this->VBO_data.push_back(glm::vec3(0.0f, 0.0f,  0.0f));

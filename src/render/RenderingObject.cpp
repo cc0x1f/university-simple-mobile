@@ -1,4 +1,4 @@
-#include "RenderingObject.h"
+#include "../../header/render/RenderingObject.h"
 
 void RenderingObject::init(ShaderProgram *shaderProgramm) {
 	glGenBuffers(1, &this->VBO);

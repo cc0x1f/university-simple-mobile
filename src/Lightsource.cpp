@@ -1,5 +1,5 @@
  
-#include "Lightsource.h" 
+#include "../header/Lightsource.h"
 #include <sstream>
 
 void Lightsource::init(ShaderProgram *shaderProgramm, int id) {
