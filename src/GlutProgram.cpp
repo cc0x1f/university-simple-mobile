@@ -103,7 +103,8 @@ void GlutProgram::printHelp(){
 	help << "\tIncrease blue: 3" << "\n";
 	help << "\tEnable/Disable ambient: a" << "\n";
 	help << "\tEnable/Disable diffuse: d" << "\n";
-	help << "\tEnable/Disable specular: s";
+	help << "\tEnable/Disable specular: s" << "\n";
+	help << "\tSwitch shading mode: 0" << "\n";
 
 	std::cout << help.str() << std::endl;
 }
@@ -162,8 +163,8 @@ void GlutProgram::initScene(void) {
 	this->pyramid[0].init(&this->shaderProgram);
 	this->pyramid[0].setMatSpecularIntensity(1.0f);
 	this->pyramid[0].setMatSpecularPower(32.0f);
-	this->pyramid[0].translate(-0.5f, 1.0f, 0.0f);
-	this->pyramid[0].rotateY(90);
+	this->pyramid[0].translate(-0.25f, 1.0f, 0.0f);
+	this->pyramid[0].rotateZ(-90);
 	this->pyramid[0].setParent(&this->line[5]);
 	// right ball
 	this->ball[0].initVertices("models/ball.obj", glm::vec3(1.0f,0.3f,0.6f));
@@ -248,6 +249,25 @@ void GlutProgram::initScene(void) {
 	this->line[6].scale(1);
 	this->line[6].translate(0.0f,-1.5f,0.0f);
 	this->line[6].setParent(&this->ball[0]);
+}
+
+void GlutProgram::reInitUniforms(void) {
+	this->camera.initUniformAndBuffer(&this->shaderProgram);
+	this->lightSources[0].init(&this->shaderProgram, 0);
+	this->lightSources[0].setDirectionalLight(this->directionalLights[0]);
+	this->lightSources[1].init(&this->shaderProgram, 1);
+	this->lightSources[1].setDirectionalLight(this->directionalLights[1]);
+	this->cube[0].initUniformAndBuffer(&this->shaderProgram);
+	this->cube[1].initUniformAndBuffer(&this->shaderProgram);
+	this->pyramid[0].initUniformAndBuffer(&this->shaderProgram);
+	this->ball[0].initUniformAndBuffer(&this->shaderProgram);
+	this->teapot[0].initUniformAndBuffer(&this->shaderProgram);
+	
+	for(int i = 0; i < 3; i++)
+		this->wall[i].initUniformAndBuffer(&this->shaderProgram);
+		
+	for(int i = 0; i < 7; i++)
+		this->line[i].initUniformAndBuffer(&this->shaderProgram);
 }
 
 void GlutProgram::run(void) {
@@ -339,6 +359,19 @@ void GlutProgram::onKeyboardInput(unsigned char key, int x, int y) {
 			break;
 		case 'o':
 			this->camera.translateZ(-1.0f);
+			break;
+		case '0':
+			this->useGouraud = !this->useGouraud;
+			this->shaderProgram.remove();
+			if(this->useGouraud) {
+				this->shaderProgram.setVertexShader("shaders/vertexshader.gouraud.vs");
+				this->shaderProgram.setFragmentShader("shaders/fragmentshader.gouraud.fs");
+			} else {
+				this->shaderProgram.setVertexShader("shaders/vertexshader.phong.vs");
+				this->shaderProgram.setFragmentShader("shaders/fragmentshader.phong.fs");
+			}
+			this->shaderProgram.create();
+			this->reInitUniforms();
 			break;
 		// color changing...
 		case '1':

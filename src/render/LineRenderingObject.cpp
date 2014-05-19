@@ -10,7 +10,7 @@ void LineRenderingObject::initVertices(glm::vec3 color) {
 	this->IBO_data.push_back(Helper::vec2s(0, 1));
 }
 
-void LineRenderingObject::init(ShaderProgram *shaderProgramm) {
+void LineRenderingObject::initUniformAndBuffer(ShaderProgram *shaderProgram) {
 	glGenBuffers(1, &this->VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * this->VBO_data.size(), &this->VBO_data[0], GL_STATIC_DRAW);
@@ -24,8 +24,12 @@ void LineRenderingObject::init(ShaderProgram *shaderProgramm) {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * this->CBO_data.size(), &this->CBO_data[0], GL_STATIC_DRAW);
 
 	// init uniform variables
-	this->modelUniform = shaderProgramm->getUniformLocation("ModelMatrix");
+	this->modelUniform = shaderProgram->getUniformLocation("ModelMatrix");
+}
 
+void LineRenderingObject::init(ShaderProgram *shaderProgram) {
+	this->initUniformAndBuffer(shaderProgram);
+	
 	// Initialize matrix
 	this->translationMatrix = glm::mat4(1.0f);
 	this->scaleMatrix = glm::mat4(1.0f);
