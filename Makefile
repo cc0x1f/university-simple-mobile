@@ -6,7 +6,7 @@ RENDER_DIR = $(SRC_DIR)/render
 OBJPARSER_DIR = $(SRC_DIR)/objparser
 
 # add -DDEBUG=1 to CFLAGS enable debug output
-CFLAGS = -g -std=c++11 -Wall -DDEBUG=1
+CFLAGS = -g -Wall -DDEBUG=1
 LDLIBS = -lm -lglut -lGLEW -lGL
 INCLUDES = -Isource
 VPATH = src

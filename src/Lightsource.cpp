@@ -1,10 +1,13 @@
  
 #include "Lightsource.h" 
+#include <sstream>
 
 void Lightsource::init(ShaderProgram *shaderProgramm, int id) {
 	this->id = id;
 
-	std::string base = "gDirectionalLight[" + std::to_string(this->id) + "]."; // WARNING: std::to_string requires std=c++11 !
+	std::stringstream s;
+	s << "gDirectionalLight[" << this->id << "].";
+	std::string base = s.str();
 
 	// init uniform variables
 	this->directionalLightColorUniform = shaderProgramm->getUniformLocation((base + "color").c_str());
