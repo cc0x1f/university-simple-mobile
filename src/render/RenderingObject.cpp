@@ -122,7 +122,7 @@ void RenderingObject::calcNormals(void) {
 	this->NORMALS_data.resize(this->VBO_data.size());
 	
 	// iterate over each face
-	for( uint i = 0; i < this->IBO_data.size(); i++ ) {
+	for( unsigned int i = 0; i < this->IBO_data.size(); i++ ) {
 		// get the three vertices that make the faces
 		glm::vec3 p1 = this->VBO_data[this->IBO_data[i].x];
 		glm::vec3 p2 = this->VBO_data[this->IBO_data[i].y];
