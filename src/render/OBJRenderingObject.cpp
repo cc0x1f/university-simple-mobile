@@ -1,10 +1,10 @@
-#include "OBJRenderingObject.h"
+#include "../../header/render/OBJRenderingObject.h"
 
-void OBJRenderingObject::setColor(Vector3f color) {
+void OBJRenderingObject::setColor(glm::vec3 color) {
 	this->color = color;
 }
 
-void OBJRenderingObject::initVertices(const char* filename, Vector3f color) {
+void OBJRenderingObject::initVertices(const char* filename, glm::vec3 color) {
 	int success, i;
 	
 	this->color = color;
@@ -15,31 +15,25 @@ void OBJRenderingObject::initVertices(const char* filename, Vector3f color) {
 		exit(1);
 	}
 
-	this->VBO_size = this->data.vertex_count;
-	this->CBO_size = this->data.vertex_count;
-	this->IBO_size = this->data.face_count;
-
-	this->VBO_data = (Vector3f*) calloc (this->VBO_size, sizeof(Vector3f));
-	this->CBO_data = (Vector3f*) calloc (this->CBO_size, sizeof(Vector3f));
-	this->IBO_data = (Vector3s*) calloc (this->IBO_size, sizeof(Vector3s));
-
 	 /* Vertices */
-    for(i=0; i < this->VBO_size; i++) {
-		this->VBO_data[i] = Vector3f((GLfloat)(*this->data.vertex_list[i]).e[0], (GLfloat)(*this->data.vertex_list[i]).e[1], (GLfloat)(*this->data.vertex_list[i]).e[2]);
-		this->CBO_data[i] = Vector3f((GLfloat)(*this->data.vertex_list[i]).e[0], (GLfloat)(*this->data.vertex_list[i]).e[1], (GLfloat)(*this->data.vertex_list[i]).e[2]);
+    for(i=0; i < this->data.vertex_count; i++) {
+		this->VBO_data.push_back(glm::vec3((GLfloat)(*this->data.vertex_list[i]).e[0], (GLfloat)(*this->data.vertex_list[i]).e[1], (GLfloat)(*this->data.vertex_list[i]).e[2]));
+		this->CBO_data.push_back(this->color);
     }
 
     /* Indices */
-    for(i=0; i < this->IBO_size; i++) {
-		this->IBO_data[i] = Vector3s((GLushort)(*this->data.face_list[i]).vertex_index[0],(GLushort)(*this->data.face_list[i]).vertex_index[1],(GLushort)(*this->data.face_list[i]).vertex_index[2]);
+    for(i=0; i < this->data.face_count; i++) {
+		this->IBO_data.push_back(Helper::vec3s((GLushort)(*this->data.face_list[i]).vertex_index[0],(GLushort)(*this->data.face_list[i]).vertex_index[1],(GLushort)(*this->data.face_list[i]).vertex_index[2]));
     }
-
-#ifdef DEBUG
-	for(int i=0; i< this->VBO_size; i++) {
-		printf("%d:\t%f,%f,%f\n", i, this->VBO_data[i].x, this->VBO_data[i].y, this->VBO_data[i].z);
+    
+    this->calcNormals();
+	
+	#ifdef DEBUG
+	for(unsigned int i=0; i< this->NORMALS_data.size(); i++) {
+		printf("%d:\t%f,%f,%f\n", i, this->NORMALS_data.at(i).x, this->NORMALS_data.at(i).y, this->NORMALS_data.at(i).z);
 	}
 
-	printf("Hexagon-Rendering vertices set!\n");
+	printf("Printed OBJ normals!\n");
 	fflush(stdout);
-#endif
+	#endif
 }

@@ -1,4 +1,4 @@
-#include "src/GlutProgram.h"
+#include "header/GlutProgram.h"
 
 /*----------------------------------------------------------------*/
 GlutProgram *glutProgram;
