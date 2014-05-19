@@ -1,4 +1,4 @@
-#include "../../header/render/RenderingObject.h"
+#include "RenderingObject.h"
 
 void RenderingObject::init(ShaderProgram *shaderProgramm) {
 	glGenBuffers(1, &this->VBO);
@@ -120,6 +120,17 @@ void RenderingObject::translate(float x, float y, float z) {
 void RenderingObject::calcNormals(void) {
 	
 	this->NORMALS_data.resize(this->VBO_data.size());
+	std::vector<bool> needsRecalc;
+	
+	needsRecalc.resize(this->VBO_data.size());
+	
+	for( unsigned int i = 0; i < this->NORMALS_data.size(); i++ ) {
+		this->NORMALS_data[i] = glm::vec3(0); // init with 0 vector
+	}
+	
+	for( unsigned int i = 0; i < needsRecalc.size(); i++ ) {
+		needsRecalc[i] = false;
+	}
 	
 	// iterate over each face
 	for( unsigned int i = 0; i < this->IBO_data.size(); i++ ) {
@@ -133,9 +144,19 @@ void RenderingObject::calcNormals(void) {
 		glm::vec3 normal = glm::normalize(glm::cross(v1, v2));
 
 		// Store the face's normal for each of the vertices that make up the face.
-		this->NORMALS_data[this->IBO_data[i].x] = normal;
-		this->NORMALS_data[this->IBO_data[i].y] = normal;
-		this->NORMALS_data[this->IBO_data[i].z] = normal;
+		if(this->NORMALS_data[this->IBO_data[i].x] != glm::vec3(0)) needsRecalc[this->IBO_data[i].x] = true;
+		if(this->NORMALS_data[this->IBO_data[i].y] != glm::vec3(0)) needsRecalc[this->IBO_data[i].y] = true;
+		if(this->NORMALS_data[this->IBO_data[i].z] != glm::vec3(0)) needsRecalc[this->IBO_data[i].z] = true;
+		
+		this->NORMALS_data[this->IBO_data[i].x] = this->NORMALS_data[this->IBO_data[i].x] + normal;
+		this->NORMALS_data[this->IBO_data[i].y] = this->NORMALS_data[this->IBO_data[i].y] + normal;
+		this->NORMALS_data[this->IBO_data[i].z] = this->NORMALS_data[this->IBO_data[i].z] + normal;
+	}
+	
+	for( unsigned int i = 0; i < needsRecalc.size(); i++ ) {
+		if(needsRecalc[i]) {
+			this->NORMALS_data[i] = glm::normalize(this->NORMALS_data[i]);
+		}
 	}
 	
 	glGenBuffers(1, &this->NORMALS);

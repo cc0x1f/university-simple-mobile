@@ -1,4 +1,4 @@
-#include "../header/GlutProgram.h"
+#include "GlutProgram.h"
 #include <sstream>
 #include <iostream>
 
@@ -22,14 +22,27 @@ void GlutProgram::setTitle(const char *title){
 }
 
 void GlutProgram::init(int *argc, char **argv) {
+	this->useGouraud = true;
+	
+	if(*argc > 1) {
+		if(strncmp(argv[1], "-g", 2) == 0){
+			this->useGouraud = true;
+		} else if (strncmp(argv[1], "-p", 2) == 0) {
+			this->useGouraud = false;
+		} else if( strncmp(argv[1], "-h", 2 ) == 0 ){
+			printHelp();
+			exit(0);
+		}
+		else {
+			printf("Incorrect argument, using Gourard shading!\n");
+		}
+	}
+	
 	glutInit(argc, argv);
-	// Define a opengl context...
-	// glutInitContextVersion(3,3);
-	// glutInitContextProfile(GLUT_CORE_PROFILE);
 	glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGBA|GLUT_DEPTH);
 	glutInitWindowSize(this->width, this->height);
 	glutInitWindowPosition(this->posX, this->posY);
-	glutCreateWindow(this->title);
+	this->glutWindowId = glutCreateWindow(this->title);
 	
 	// specifiy glut callbacks
 	glutIdleFunc(GlutProgram::onIdleWrapper);
@@ -52,22 +65,6 @@ void GlutProgram::init(int *argc, char **argv) {
 	// Enable depth testing
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
-
-	this->useGouraud = true;
-	
-	if(*argc > 1) {
-		if(strncmp(argv[1], "-g", 2) == 0){
-			this->useGouraud = true;
-		} else if (strncmp(argv[1], "-p", 2) == 0) {
-			this->useGouraud = false;
-		} else if( strncmp(argv[1], "-h", 2 ) == 0 ){
-			printHelp();
-			exit(0);
-		}
-		else {
-			printf("Incorrect argument, using Gourard shading!\n");
-		}
-	}
 	
 	if(this->useGouraud) {
 		this->shaderProgram.setVertexShader("shaders/vertexshader.gouraud.vs");
@@ -121,18 +118,18 @@ void GlutProgram::initScene(void) {
 	
 	// init lightsources
 	this->lightSources[0].init(&this->shaderProgram, 0);
-	this->directionalLights[0].position = glm::vec3(4.0f, 4.0f, 10.0f);
+	this->directionalLights[0].position = glm::vec3(4.0f, 4.0f, 0.0f);
 	this->directionalLights[0].color = glm::vec3(1.0f, 1.0f, 1.0f);
-    this->directionalLights[0].ambientIntensity = 0.5f;
-	this->directionalLights[0].diffuseIntensity = 0.7f;
+    this->directionalLights[0].ambientIntensity = 0.3f;
+	this->directionalLights[0].diffuseIntensity = 0.4f;
 	this->directionalLights[0].useAmbient = 1;
 	this->directionalLights[0].useDiffuse = 1;
 	this->directionalLights[0].useSpecular = 1;
 	this->lightSources[0].setDirectionalLight(this->directionalLights[0]);
 	
 	this->lightSources[1].init(&this->shaderProgram, 1);
-	this->directionalLights[1].position = glm::vec3(-1.0f, 0.0f, 0.0f);
-	this->directionalLights[1].color = glm::vec3(0.0f, 0.0f, 1.0f); // a second blue light ;)
+	this->directionalLights[1].position = glm::vec3(1.0f, 0.0f, -5.0f);
+	this->directionalLights[1].color = glm::vec3(0.0f, 1.0f, 1.0f); // a second yellowish light ;)
     this->directionalLights[1].ambientIntensity = 0.0f;
 	this->directionalLights[1].diffuseIntensity = 0.4f;
 	this->directionalLights[1].useAmbient = 0;
@@ -187,19 +184,23 @@ void GlutProgram::initScene(void) {
 	this->teapot[0].setParent(&this->line[6]);
 	
 	// background walls
+	// bottom
 	this->wall[0].initVertices("models/rectangle.obj", glm::vec3(0.8f,0.8f,1.0f));
 	this->wall[0].init(&this->shaderProgram);
 	this->wall[0].rotateX(90);
 	this->wall[0].scale(10);
 	this->wall[0].translate(3, -7, 3);
+	// left
 	this->wall[1].initVertices("models/rectangle.obj", glm::vec3(0.8f,0.8f,1.0f));
 	this->wall[1].init(&this->shaderProgram);
 	this->wall[1].rotateY(-90);
 	this->wall[1].scale(10);
 	this->wall[1].translate(-7, 3, 3);
+	// back
 	this->wall[2].initVertices("models/rectangle.obj", glm::vec3(0.8f,0.8f,1.0f));
 	this->wall[2].init(&this->shaderProgram);
 	this->wall[2].scale(10);
+	this->wall[2].rotateY(-180);
 	this->wall[2].translate(3, 3, -7);
 	
 	// lines
@@ -318,7 +319,8 @@ void GlutProgram::onKeyboardInput(unsigned char key, int x, int y) {
 	switch (key) {
 		case 27:
 		case 'q':
-			exit(0);
+			this->shaderProgram.remove();
+			glutDestroyWindow(this->glutWindowId);
 			break;
 		case 'r':
 			this->camera.toggleAutoRotate();

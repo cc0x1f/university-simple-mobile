@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../header/ShaderProgram.h"
+#include "ShaderProgram.h"
 
 /******************************************************************
 *
@@ -151,6 +151,17 @@ void ShaderProgram::create(void) {
 
 	/* Put linked shader program into drawing pipeline */
 	glUseProgram(this->shaderProgram);
+}
+
+/******************************************************************
+*
+* delete
+*
+* delete the shader program and clean up memory
+*
+*******************************************************************/
+void ShaderProgram::remove (void) {
+	glDeleteProgram(this->shaderProgram);
 }
 
 /******************************************************************

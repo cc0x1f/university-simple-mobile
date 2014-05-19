@@ -1,4 +1,4 @@
-#include "../header/Camera.h"
+#include "Camera.h"
 
 void Camera::init(ShaderProgram *shaderProgramm) {
 	// init uniform variables
