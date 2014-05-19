@@ -49,7 +49,7 @@ void main()
 
 		vec3 viewDirection = normalize(vec3(0,0,0) - (ViewMatrix * vPosition).xyz);
 		vec3 lightDirection = normalize(gDirectionalLight[light].position - vec3(vPosition));
-		vec3 reflectDirection = normalize(reflect(-lightDirection, vnDirection));
+		vec3 reflectDirection = reflect(-lightDirection, normalize(vnDirection));
 		
 		cosAngIncidence = dot(normalize(vnDirection), lightDirection);
 		cosAngIncidence = clamp(cosAngIncidence, 0, 1);

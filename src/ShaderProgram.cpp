@@ -155,6 +155,17 @@ void ShaderProgram::create(void) {
 
 /******************************************************************
 *
+* delete
+*
+* delete the shader program and clean up memory
+*
+*******************************************************************/
+void ShaderProgram::remove (void) {
+	glDeleteProgram(this->shaderProgram);
+}
+
+/******************************************************************
+*
 * getUniformLocation
 *
 * return the location to a uniform variable

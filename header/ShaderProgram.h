@@ -25,5 +25,6 @@ class ShaderProgram {
 		void setFragmentShader(const char* filename);
 		GLuint getUniformLocation(const char* varname);
 		void create(void);
+		void remove(void);
 };
 #endif // __SHADER_PROGRAM_H__

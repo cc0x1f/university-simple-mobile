@@ -32,6 +32,7 @@ class GlutProgram {
 		int height;
 		int posX;
 		int posY;
+		int glutWindowId;
 		bool rotateMobile;
 		bool useGouraud;
 		const char *title;
