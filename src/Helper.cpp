@@ -1,4 +1,4 @@
-#include "Helper.h"
+#include "../header/Helper.h"
 
 void Helper::printMatrix(glm::mat4 matrix) {
 	int row, column;

@@ -1,4 +1,4 @@
-#include "GlutProgram.h"
+#include "../header/GlutProgram.h"
 #include <sstream>
 #include <iostream>
 

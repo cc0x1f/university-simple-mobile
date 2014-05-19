@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "ShaderProgram.h"
+#include "../header/ShaderProgram.h"
 
 /******************************************************************
 *
