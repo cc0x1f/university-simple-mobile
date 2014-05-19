@@ -1,4 +1,6 @@
 #include "GlutProgram.h"
+#include <sstream>
+#include <iostream>
 
 GlutProgram *GlutProgram::instance = 0;
 void GlutProgram::setInstance(GlutProgram *glutProgram) {
@@ -54,11 +56,15 @@ void GlutProgram::init(int *argc, char **argv) {
 	this->useGouraud = true;
 	
 	if(*argc > 1) {
-		if(strncmp(argv[1], "g", 1) == 0){
+		if(strncmp(argv[1], "-g", 2) == 0){
 			this->useGouraud = true;
-		} else if (strncmp(argv[1], "p", 1) == 0) {
+		} else if (strncmp(argv[1], "-p", 2) == 0) {
 			this->useGouraud = false;
-		} else {
+		} else if( strncmp(argv[1], "-h", 2 ) == 0 ){
+			printHelp();
+			exit(0);
+		}
+		else {
 			printf("Incorrect argument, using Gourard shading!\n");
 		}
 	}
@@ -77,6 +83,32 @@ void GlutProgram::init(int *argc, char **argv) {
 	
 	// init the scene
 	this->initScene();
+}
+
+void GlutProgram::printHelp(){
+	std::stringstream help;
+
+	help << "Command line arguments: " << "\n";
+	help << "\tGouraud: -g or nothing" << "\n";
+	help << "\tPhong: -p" << "\n";
+	help << "\tHelp: -h" << "\n\n";
+
+	help << "Runtime Options: " << "\n";
+	help << "\tQuit: ESC or q" << "\n";
+	help << "\tToggle Camera Auto-Rotating: r" << "\n";
+	help << "\tDisable/Enable Mobile rotating: t" << "\n";
+	help << "\tIncrease Ambient Intensity: m" << "\n";
+	help << "\tDecrease Ambient Intensity: n" << "\n";
+	help << "\tTranslate Z-Axis+: i" << "\n";
+	help << "\tTranslate Z-Axis-: o" << "\n";
+	help << "\tIncrease red: 1" << "\n";
+	help << "\tIncrease green: 2" << "\n";
+	help << "\tIncrease blue: 3" << "\n";
+	help << "\tEnable/Disable ambient: a" << "\n";
+	help << "\tEnable/Disable diffuse: d" << "\n";
+	help << "\tEnable/Disable specular: s";
+
+	std::cout << help.str() << std::endl;
 }
 
 void GlutProgram::initScene(void) {

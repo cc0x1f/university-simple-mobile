@@ -77,6 +77,7 @@ class GlutProgram {
 		void onKeyboardInput(unsigned char key, int x, int y);
 		void onSpecialInput(int key, int x, int y);
 		void onMouseInput(int button, int state, int x, int y);
+		void printHelp();
 		
 		void initScene(void);
 		
