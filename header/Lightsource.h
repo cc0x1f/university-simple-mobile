@@ -43,7 +43,7 @@ class Lightsource {
 		
 		int id;
 	public:
-		void init(ShaderProgram *shaderProgramm, int id);
+		void init(ShaderProgram *shaderProgram, int id);
 		void setDirectionalLight(const DirectionalLight& light);
 };
 

@@ -52,7 +52,8 @@ class RenderingObject {
 
 		void calculateModelMatrix(void);
 	public:
-		void init(ShaderProgram *shaderProgramm);
+		void initUniformAndBuffer(ShaderProgram *shaderProgram);
+		void init(ShaderProgram *shaderProgram);
 		void setParent(RenderingObject *parent);
 		RenderingObject *getParent(void);
 		void render(void);

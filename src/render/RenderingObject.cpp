@@ -1,6 +1,6 @@
 #include "../../header/render/RenderingObject.h"
 
-void RenderingObject::init(ShaderProgram *shaderProgramm) {
+void RenderingObject::initUniformAndBuffer(ShaderProgram *shaderProgram) {
 	glGenBuffers(1, &this->VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * this->VBO_data.size(), &this->VBO_data[0], GL_STATIC_DRAW);
@@ -14,9 +14,13 @@ void RenderingObject::init(ShaderProgram *shaderProgramm) {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * this->CBO_data.size(), &this->CBO_data[0], GL_STATIC_DRAW);
 
 	// init uniform variables
-	this->modelUniform = shaderProgramm->getUniformLocation("ModelMatrix");
-	this->specularIntensityUniform = shaderProgramm->getUniformLocation("materialSpecularIntensity");
-	this->specularPowerUniform = shaderProgramm->getUniformLocation("materialSpecularPower");
+	this->modelUniform = shaderProgram->getUniformLocation("ModelMatrix");
+	this->specularIntensityUniform = shaderProgram->getUniformLocation("materialSpecularIntensity");
+	this->specularPowerUniform = shaderProgram->getUniformLocation("materialSpecularPower");
+}
+
+void RenderingObject::init(ShaderProgram *shaderProgram) {
+	this->initUniformAndBuffer(shaderProgram);
 	
 	/* initialize temp matrices */
 	this->translationMatrix = glm::mat4(1.0f);
@@ -147,10 +151,10 @@ void RenderingObject::calcNormals(void) {
 		if(this->NORMALS_data[this->IBO_data[i].x] != glm::vec3(0)) needsRecalc[this->IBO_data[i].x] = true;
 		if(this->NORMALS_data[this->IBO_data[i].y] != glm::vec3(0)) needsRecalc[this->IBO_data[i].y] = true;
 		if(this->NORMALS_data[this->IBO_data[i].z] != glm::vec3(0)) needsRecalc[this->IBO_data[i].z] = true;
-		
-		this->NORMALS_data[this->IBO_data[i].x] = this->NORMALS_data[this->IBO_data[i].x] + normal;
-		this->NORMALS_data[this->IBO_data[i].y] = this->NORMALS_data[this->IBO_data[i].y] + normal;
-		this->NORMALS_data[this->IBO_data[i].z] = this->NORMALS_data[this->IBO_data[i].z] + normal;
+
+		this->NORMALS_data[this->IBO_data[i].x] += normal;
+		this->NORMALS_data[this->IBO_data[i].y] += normal;
+		this->NORMALS_data[this->IBO_data[i].z] += normal;
 	}
 	
 	for( unsigned int i = 0; i < needsRecalc.size(); i++ ) {

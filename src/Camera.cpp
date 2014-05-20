@@ -1,9 +1,13 @@
 #include "../header/Camera.h"
 
-void Camera::init(ShaderProgram *shaderProgramm) {
+void Camera::initUniformAndBuffer(ShaderProgram *shaderProgram) {
 	// init uniform variables
-	this->projectionUniform = shaderProgramm->getUniformLocation("ProjectionMatrix");
-	this->viewUniform = shaderProgramm->getUniformLocation("ViewMatrix");
+	this->projectionUniform = shaderProgram->getUniformLocation("ProjectionMatrix");
+	this->viewUniform = shaderProgram->getUniformLocation("ViewMatrix");
+}
+
+void Camera::init(ShaderProgram *shaderProgram) {
+	this->initUniformAndBuffer(shaderProgram);
 	this->autoRotate = true;
 	this->autoRotated = 0;
 	

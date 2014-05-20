@@ -7,7 +7,8 @@ class LineRenderingObject : public RenderingObject {
 		std::vector<Helper::vec2s> IBO_data;
 	public:
 		void initVertices(glm::vec3 color);
-		void init(ShaderProgram *shaderProgramm);
+		void initUniformAndBuffer(ShaderProgram *shaderProgram);
+		void init(ShaderProgram *shaderProgram);
 };
 #endif // __GRID_RENDERING_OBJECT_H__
  

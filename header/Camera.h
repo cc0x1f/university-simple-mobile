@@ -38,7 +38,8 @@ class Camera {
     
 		void calculateViewMatrix(void);
 	public:
-		void init(ShaderProgram *shaderProgramm);
+		void initUniformAndBuffer(ShaderProgram *shaderProgram);
+		void init(ShaderProgram *shaderProgram);
 		void zoom(float scale);
 		void rotateX(float angle);
 		void rotateY(float angle);
