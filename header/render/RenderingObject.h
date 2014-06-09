@@ -32,10 +32,10 @@ class RenderingObject {
 		
 		RenderingObject *parent;
 
-		std::vector<glm::vec3> VBO_data;
-		std::vector<glm::vec3> NORMALS_data;
-		std::vector<glm::vec2> UV_data;
-		std::vector<Helper::vec3s> IBO_data;
+		std::vector<float> VBO_data;
+		std::vector<float> NORMALS_data;
+		std::vector<float> UV_data;
+		std::vector<unsigned short> IBO_data;
 
 		glm::mat4 modelMatrix; // Model matrix
 		glm::mat4 renderingModelMatrix; // FINAL Model matrix for rendering

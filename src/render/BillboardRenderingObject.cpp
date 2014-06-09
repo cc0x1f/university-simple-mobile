@@ -1,18 +1,18 @@
 #include "../../header/render/BillboardRenderingObject.h"
 
 void BillboardRenderingObject::initVertices(void) {
-	this->VBO_data.push_back(glm::vec3(0.0f, 0.0f,  0.0f));
-	this->VBO_data.push_back(glm::vec3(0.0f, 1.0f,  0.0f));
-	this->VBO_data.push_back(glm::vec3(1.0f, 1.0f,  0.0f));
-	this->VBO_data.push_back(glm::vec3(1.0f, 0.0f,  0.0f));
+	this->VBO_data.push_back(0.0f);	this->VBO_data.push_back(0.0f);	this->VBO_data.push_back(0.0f);
+	this->VBO_data.push_back(0.0f);	this->VBO_data.push_back(1.0f);	this->VBO_data.push_back(0.0f);
+	this->VBO_data.push_back(1.0f);	this->VBO_data.push_back(1.0f);	this->VBO_data.push_back(0.0f);
+	this->VBO_data.push_back(1.0f);	this->VBO_data.push_back(0.0f);	this->VBO_data.push_back(0.0f);
 		
-	this->UV_data.push_back(glm::vec2(0.0f, 0.0f));
-	this->UV_data.push_back(glm::vec2(0.0f, 1.0f));
-	this->UV_data.push_back(glm::vec2(1.0f, 1.0f));
-	this->UV_data.push_back(glm::vec2(1.0f, 0.0f));
+	this->UV_data.push_back(0.0f);	this->UV_data.push_back(0.0f);
+	this->UV_data.push_back(0.0f);	this->UV_data.push_back(1.0f);
+	this->UV_data.push_back(1.0f);	this->UV_data.push_back(1.0f);
+	this->UV_data.push_back(1.0f);	this->UV_data.push_back(0.0f);
 		
-	this->IBO_data.push_back(Helper::vec3s(0, 1, 3));
-	this->IBO_data.push_back(Helper::vec3s(1, 2, 3));
+	this->IBO_data.push_back(0);	this->IBO_data.push_back(1);	this->IBO_data.push_back(3);
+	this->IBO_data.push_back(1);	this->IBO_data.push_back(2);	this->IBO_data.push_back(3);
 	
 	// set animation animationtime
 	this->animationTime = 100; // milliseconds
@@ -22,13 +22,11 @@ void BillboardRenderingObject::initVertices(void) {
 	
 	// Define normals
 	this->NORMALS_data.resize(this->VBO_data.size());
-	for (unsigned int i = 0; i < this->VBO_data.size(); i++){
-		this->NORMALS_data[i] = glm::vec3(0.0, 0.0, 1.0);
+	for (unsigned int i = 0; i < this->VBO_data.size(); i = i+3){
+		this->NORMALS_data[i] = 0.0f;
+		this->NORMALS_data[i+1] = 0.0f;
+		this->NORMALS_data[i+2] = 1.0f;
 	}
-	
-	glGenBuffers(1, &this->NORMALS);
-	glBindBuffer(GL_ARRAY_BUFFER, this->NORMALS);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * this->NORMALS_data.size(), &this->NORMALS_data[0], GL_STATIC_DRAW);
 }
 
 void BillboardRenderingObject::update(void) {
@@ -51,37 +49,37 @@ void BillboardRenderingObject::update(void) {
 		case 1:
 		case 2:
 		case 3:
-			this->UV_data.push_back(glm::vec2(0.0f, 0.75f - stepSize));
-			this->UV_data.push_back(glm::vec2(0.25f, 1.0f - stepSize));
-			this->UV_data.push_back(glm::vec2(0.25f, 0.75f - stepSize));
-			this->UV_data.push_back(glm::vec2(0.0f, 1.0f - stepSize));
+			this->UV_data.push_back(0.0f); this->UV_data.push_back(0.75f - stepSize);
+			this->UV_data.push_back(0.25f); this->UV_data.push_back(1.0f - stepSize);
+			this->UV_data.push_back(0.25f); this->UV_data.push_back(0.75f - stepSize);
+			this->UV_data.push_back(0.0f); this->UV_data.push_back(1.0f - stepSize);
 			break;
 		case 4:
 		case 5:
 		case 6:
 		case 7:
-			this->UV_data.push_back(glm::vec2(0.25f, 1.0f - (stepSize - 4)));
-			this->UV_data.push_back(glm::vec2(0.5f, 1.0f - (stepSize - 4)));
-			this->UV_data.push_back(glm::vec2(0.5f, 0.75f - (stepSize - 4)));
-			this->UV_data.push_back(glm::vec2(0.25f, 0.75f - (stepSize - 4)));
+			this->UV_data.push_back(0.25f); this->UV_data.push_back(1.0f - (stepSize - 4));
+			this->UV_data.push_back(0.5f); this->UV_data.push_back(1.0f - (stepSize - 4));
+			this->UV_data.push_back(0.5f); this->UV_data.push_back(0.75f - (stepSize - 4));
+			this->UV_data.push_back(0.25f); this->UV_data.push_back(0.75f - (stepSize - 4));
 			break;
 		case 8:
 		case 9:
 		case 10:
 		case 11:
-			this->UV_data.push_back(glm::vec2(0.5f, 1.0f - (stepSize - 8)));
-			this->UV_data.push_back(glm::vec2(0.75f, 1.0f - (stepSize - 8)));
-			this->UV_data.push_back(glm::vec2(0.75f, 0.75f - (stepSize - 8)));
-			this->UV_data.push_back(glm::vec2(0.5f, 0.75f - (stepSize - 8)));
+			this->UV_data.push_back(0.5f); this->UV_data.push_back(1.0f - (stepSize - 8));
+			this->UV_data.push_back(0.75f); this->UV_data.push_back(1.0f - (stepSize - 8));
+			this->UV_data.push_back(0.75f); this->UV_data.push_back(0.75f - (stepSize - 8));
+			this->UV_data.push_back(0.5f); this->UV_data.push_back(0.75f - (stepSize - 8));
 			break;
 		case 12:
 		case 13:
 		case 14:
 		case 15:
-			this->UV_data.push_back(glm::vec2(0.75f, 1.0f - (stepSize - 12)));
-			this->UV_data.push_back(glm::vec2(0.1f, 1.0f - (stepSize - 12)));
-			this->UV_data.push_back(glm::vec2(0.1f, 0.75f - (stepSize - 12)));
-			this->UV_data.push_back(glm::vec2(0.75f, 0.75f - (stepSize - 12)));
+			this->UV_data.push_back(0.75f); this->UV_data.push_back(1.0f - (stepSize - 12));
+			this->UV_data.push_back(0.1f); this->UV_data.push_back(1.0f - (stepSize - 12));
+			this->UV_data.push_back(0.1f); this->UV_data.push_back(0.75f - (stepSize - 12));
+			this->UV_data.push_back(0.75f); this->UV_data.push_back(0.75f - (stepSize - 12));
 			break;
 		default:
 			break;
@@ -91,7 +89,7 @@ void BillboardRenderingObject::update(void) {
 	
 	//glGenBuffers(1, &this->UV);
 	glBindBuffer(GL_ARRAY_BUFFER, this->UV);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * this->UV_data.size(), &this->UV_data[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * this->UV_data.size(), &this->UV_data[0], GL_STATIC_DRAW);
 }
 
 void BillboardRenderingObject::setCam(Camera *cam){

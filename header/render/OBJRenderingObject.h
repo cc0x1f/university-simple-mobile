@@ -1,11 +1,11 @@
 #include "RenderingObject.h"
-#include "../objparser/OBJParser.h"
+#include "../objparser/tiny_obj_loader.h"
 
 #ifndef __OBJ_RENDERING_OBJECT_H__
 #define __OBJ_RENDERING_OBJECT_H__
 class OBJRenderingObject : public RenderingObject {
 	private:
-		obj_scene_data data; // Structure for loading of OBJ data 
+		std::vector<tinyobj::shape_t> shapes; // Structure for loading of OBJ data 
 	public:
 		void initVertices(const char* filename);
 };

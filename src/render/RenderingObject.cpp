@@ -3,15 +3,19 @@
 void RenderingObject::initUniformAndBuffer(ShaderProgram *shaderProgram) {
 	glGenBuffers(1, &this->VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * this->VBO_data.size(), &this->VBO_data[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * this->VBO_data.size(), &this->VBO_data[0], GL_STATIC_DRAW);
 
 	glGenBuffers(1, &this->IBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->IBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Helper::vec3s) * this->IBO_data.size(), &this->IBO_data[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * this->IBO_data.size(), &this->IBO_data[0], GL_STATIC_DRAW);
 
 	glGenBuffers(1, &this->UV);
 	glBindBuffer(GL_ARRAY_BUFFER, this->UV);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * this->UV_data.size(), &this->UV_data[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * this->UV_data.size(), &this->UV_data[0], GL_STATIC_DRAW);
+	
+	glGenBuffers(1, &this->NORMALS);
+	glBindBuffer(GL_ARRAY_BUFFER, this->NORMALS);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * this->NORMALS_data.size(), &this->NORMALS_data[0], GL_STATIC_DRAW);
 
 	// init uniform variables
 	this->modelUniform = shaderProgram->getUniformLocation("ModelMatrix");
@@ -160,55 +164,6 @@ void RenderingObject::translateZ(float z) {
 
 void RenderingObject::translate(float x, float y, float z) {
 	this->translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z)) * this->translationMatrix;
-}
-
-// see http://www.opengl.org/wiki/Calculating_a_Surface_Normal
-// very helpful!
-void RenderingObject::calcNormals(void) {
-	
-	this->NORMALS_data.resize(this->VBO_data.size());
-	std::vector<bool> needsRecalc;
-	
-	needsRecalc.resize(this->VBO_data.size());
-	
-	for( unsigned int i = 0; i < this->NORMALS_data.size(); i++ ) {
-		this->NORMALS_data[i] = glm::vec3(0); // init with 0 vector
-	}
-	
-	for( unsigned int i = 0; i < needsRecalc.size(); i++ ) {
-		needsRecalc[i] = false;
-	}
-	
-	// iterate over each face
-	for( unsigned int i = 0; i < this->IBO_data.size(); i++ ) {
-		// get the three vertices that make the faces
-		glm::vec3 p1 = this->VBO_data[this->IBO_data[i].x];
-		glm::vec3 p2 = this->VBO_data[this->IBO_data[i].y];
-		glm::vec3 p3 = this->VBO_data[this->IBO_data[i].z];
-
-		glm::vec3 v1 = p2 - p1;
-		glm::vec3 v2 = p3 - p1;
-		glm::vec3 normal = glm::normalize(glm::cross(v1, v2));
-
-		// Store the face's normal for each of the vertices that make up the face.
-		if(this->NORMALS_data[this->IBO_data[i].x] != glm::vec3(0)) needsRecalc[this->IBO_data[i].x] = true;
-		if(this->NORMALS_data[this->IBO_data[i].y] != glm::vec3(0)) needsRecalc[this->IBO_data[i].y] = true;
-		if(this->NORMALS_data[this->IBO_data[i].z] != glm::vec3(0)) needsRecalc[this->IBO_data[i].z] = true;
-
-		this->NORMALS_data[this->IBO_data[i].x] += normal;
-		this->NORMALS_data[this->IBO_data[i].y] += normal;
-		this->NORMALS_data[this->IBO_data[i].z] += normal;
-	}
-	
-	for( unsigned int i = 0; i < needsRecalc.size(); i++ ) {
-		if(needsRecalc[i]) {
-			this->NORMALS_data[i] = glm::normalize(this->NORMALS_data[i]);
-		}
-	}
-	
-	glGenBuffers(1, &this->NORMALS);
-	glBindBuffer(GL_ARRAY_BUFFER, this->NORMALS);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * this->NORMALS_data.size(), &this->NORMALS_data[0], GL_STATIC_DRAW);
 }
 
 void RenderingObject::setMatSpecularIntensity(float intensity) {
