@@ -138,6 +138,13 @@ void GlutProgram::initScene(void) {
 	this->directionalLights[1].useSpecular = 1;
 	this->lightSources[1].setDirectionalLight(this->directionalLights[1]);
 	
+	// init billboard
+	this->billboard[0].initVertices();
+	this->billboard[0].initTexture("data/explosion.bmp");
+	this->billboard[0].init(&this->shaderProgram);
+	this->billboard[0].setCam(&this->camera);
+	this->billboard[0].translate(-0.5f,5.0f,-1.0f);
+	
 	// init rendering cubes
 	// left cube
 	this->cube[0].initVertices("models/cube.obj");
@@ -294,6 +301,8 @@ void GlutProgram::onDisplay(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	this->camera.render();
+	
+	this->billboard[0].render();
 	
 	// rendering hirarchie
 	this->line[0].render();
