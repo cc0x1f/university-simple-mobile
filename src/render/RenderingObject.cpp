@@ -9,14 +9,57 @@ void RenderingObject::initUniformAndBuffer(ShaderProgram *shaderProgram) {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->IBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Helper::vec3s) * this->IBO_data.size(), &this->IBO_data[0], GL_STATIC_DRAW);
 
-	glGenBuffers(1, &this->CBO);
-	glBindBuffer(GL_ARRAY_BUFFER, this->CBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * this->CBO_data.size(), &this->CBO_data[0], GL_STATIC_DRAW);
+	glGenBuffers(1, &this->UV);
+	glBindBuffer(GL_ARRAY_BUFFER, this->UV);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * this->UV_data.size(), &this->UV_data[0], GL_STATIC_DRAW);
 
 	// init uniform variables
 	this->modelUniform = shaderProgram->getUniformLocation("ModelMatrix");
 	this->specularIntensityUniform = shaderProgram->getUniformLocation("materialSpecularIntensity");
 	this->specularPowerUniform = shaderProgram->getUniformLocation("materialSpecularPower");
+	this->textureUniform = shaderProgram->getUniformLocation("TextureSampler");
+}
+
+void RenderingObject::initTexture(const char *textureFile) {
+	// Allocate texture container
+	this->texture = (TextureDataPtr*) malloc(sizeof(TextureDataPtr));
+
+	int success = Texture::load(textureFile, this->texture);
+	if (!success) {
+		printf("Error loading texture. Exiting.\n");
+		exit(-1);
+	}
+
+	// Create texture name and store in handle
+	glGenTextures(1, &TEXTURE);
+
+	// Bind texture
+	glBindTexture(GL_TEXTURE_2D, TEXTURE);
+
+	// Load texture image into memory
+	glTexImage2D(GL_TEXTURE_2D,	// Target texture
+			0,					// Base level
+			GL_RGB,				// Each element is RGB triple
+			this->texture->width, this->texture->height, 
+			0,					// Border should be zero
+			GL_BGR,				// Data storage format
+			GL_UNSIGNED_BYTE,	// Type of pixel data
+			this->texture->data);		// Pointer to image data
+
+	// Set up texturing parameters
+
+	// Repeat texture on edges when tiling
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	// Linear interpolation for magnification
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	// Trilinear MIP mapping for minification
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); 
+	glGenerateMipmap(GL_TEXTURE_2D); 
+
+	// Note: MIP mapping not visible due to fixed camera
 }
 
 void RenderingObject::init(ShaderProgram *shaderProgram) {
@@ -182,9 +225,9 @@ void RenderingObject::render(void) {
 	glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
 	glVertexAttribPointer(S_POSITION, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-	glEnableVertexAttribArray(S_COLOR);
-	glBindBuffer(GL_ARRAY_BUFFER, this->CBO);
-	glVertexAttribPointer(S_COLOR, 3, GL_FLOAT,GL_FALSE, 0, 0);   
+	glEnableVertexAttribArray(S_UV);
+	glBindBuffer(GL_ARRAY_BUFFER, this->UV);
+	glVertexAttribPointer(S_UV, 3, GL_FLOAT,GL_FALSE, 0, 0);   
 
 	if(this->renderingMode == GL_TRIANGLES) { // we do not calculate normals for lines... to much work ;)
 		glEnableVertexAttribArray(S_NORMALS);
@@ -203,6 +246,16 @@ void RenderingObject::render(void) {
 	if(this->parent != NULL) {
 		this->renderingModelMatrix = this->parent->getRenderingMatrix() * this->modelMatrix;
 	}
+	
+	// Texture stuff
+	//Activate first (and only) texture unit
+	glActiveTexture(GL_TEXTURE0);
+
+	// Bind current texture 
+	glBindTexture(GL_TEXTURE_2D, TEXTURE);
+
+	// Set location of uniform sampler variable 
+	glUniform1i(this->textureUniform, 0);
 
 	// set uniform variables
 	glUniformMatrix4fv(this->modelUniform, 1, GL_FALSE, glm::value_ptr(this->renderingModelMatrix));
@@ -214,5 +267,5 @@ void RenderingObject::render(void) {
 
 	// disable attributes
 	glDisableVertexAttribArray(S_POSITION);
-	glDisableVertexAttribArray(S_COLOR);
+	glDisableVertexAttribArray(S_UV);
 }

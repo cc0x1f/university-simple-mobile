@@ -29,3 +29,11 @@ char contains(const char *haystack, const char *needle)
 		return 0;
 	return 1;
 }
+
+int strpos(const char *haystack, const char *needle)
+{
+	const char *p = strstr(haystack, needle);
+	if (p != NULL)
+		return p - haystack;
+	return -1;
+}

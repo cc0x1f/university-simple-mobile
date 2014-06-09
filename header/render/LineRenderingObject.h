@@ -6,7 +6,7 @@ class LineRenderingObject : public RenderingObject {
 	private:
 		std::vector<Helper::vec2s> IBO_data;
 	public:
-		void initVertices(glm::vec3 color);
+		void initVertices();
 		void initUniformAndBuffer(ShaderProgram *shaderProgram);
 		void init(ShaderProgram *shaderProgram);
 };

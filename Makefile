@@ -11,7 +11,7 @@ LDLIBS = -lm -lglut -lGLEW -lGL
 INCLUDES = -Isource
 VPATH = src
 
-OBJ = Mobile.o $(SRC_DIR)/Helper.o $(SRC_DIR)/ShaderProgram.o $(SRC_DIR)/Camera.o $(SRC_DIR)/Lightsource.o $(SRC_DIR)/GlutProgram.o $(OBJPARSER_DIR)/StringExtra.o $(OBJPARSER_DIR)/List.o $(OBJPARSER_DIR)/OBJParser.o $(RENDER_DIR)/RenderingObject.o $(RENDER_DIR)/LineRenderingObject.o $(RENDER_DIR)/OBJRenderingObject.o
+OBJ = Mobile.o $(SRC_DIR)/Helper.o $(SRC_DIR)/ShaderProgram.o $(SRC_DIR)/Texture.o $(SRC_DIR)/Camera.o $(SRC_DIR)/Lightsource.o $(SRC_DIR)/GlutProgram.o $(OBJPARSER_DIR)/StringExtra.o $(OBJPARSER_DIR)/List.o $(OBJPARSER_DIR)/OBJParser.o $(RENDER_DIR)/RenderingObject.o $(RENDER_DIR)/LineRenderingObject.o $(RENDER_DIR)/OBJRenderingObject.o
 TARGET = Mobile
 
 # Rules

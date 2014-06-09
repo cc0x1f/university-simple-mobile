@@ -8,7 +8,7 @@
 // Mapping for our vertex attributes in the shader files
 // this is the hardcoded variant.
 // TODO: move to glGetAttribLocation
-enum ShaderMapping {S_POSITION = 0, S_COLOR = 1, S_NORMALS = 2};
+enum ShaderMapping {S_POSITION = 0, S_UV = 1, S_NORMALS = 2};
 
 class ShaderProgram {
 	private:

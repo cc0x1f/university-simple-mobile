@@ -41,7 +41,7 @@ int obj_convert_to_list_index(int current_max, int index)
 
 void obj_convert_to_list_index_v(int current_max, int *indices)
 {
-int i;
+	int i;
 	for(i=0; i<MAX_VERTEX_COUNT; i++)
 		indices[i] = obj_convert_to_list_index(current_max, indices[i]);
 }
@@ -177,9 +177,18 @@ obj_light_disc* obj_parse_light_disc(obj_growable_scene_data *scene)
 obj_vector* obj_parse_vector()
 {
 	obj_vector *v = (obj_vector*)malloc(sizeof(obj_vector));
-	v->e[0] = atof( strtok(NULL, WHITESPACE));
-	v->e[1] = atof( strtok(NULL, WHITESPACE));
-	v->e[2] = atof( strtok(NULL, WHITESPACE));
+	char *ptr = NULL;
+	int i = 0;
+	
+	for(i = 0; i < 3; i++) {
+		ptr = strtok(NULL, WHITESPACE);
+		if(ptr != NULL) {
+			v->e[i] = atof(ptr);
+		} else { 
+			v->e[i] = 0;
+		}
+	}
+	
 	return v;
 }
 
