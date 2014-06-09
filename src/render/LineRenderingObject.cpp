@@ -5,7 +5,7 @@ void LineRenderingObject::initVertices() {
 	this->VBO_data.push_back(glm::vec3(0.0f, 1.0f,  0.0f));
 		
 	this->UV_data.push_back(glm::vec2(0.0f, 0.0f));
-	this->UV_data.push_back(glm::vec2(1.0f, 1.0f));
+	this->UV_data.push_back(glm::vec2(0.0f, 0.0f));
 		
 	this->IBO_data.push_back(Helper::vec2s(0, 1));
 }
