@@ -8,11 +8,11 @@ uniform mat4 ModelMatrix;
 
 // Input vertex data, different for all executions of this shader.
 layout (location = 0) in vec3 Position;
-layout (location = 1) in vec4 Color;
+layout (location = 1) in vec2 UV;
 layout (location = 2) in vec3 Normal;
 
 // Output data ; will be interpolated for each fragment.
-out vec4 vColor;
+out vec2 UVcoords;
 out vec3 vnDirection;
 out vec4 vPosition;
 
@@ -24,5 +24,5 @@ void main()
 	
 	vnDirection = normalize(vec3(ModelMatrix * vec4(Normal, 0.0)));
 	
-	vColor = Color;
+	UVcoords = UV;
 }

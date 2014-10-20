@@ -19,12 +19,13 @@ struct DirectionalLight
 uniform mat4 ProjectionMatrix;
 uniform mat4 ViewMatrix;
 uniform mat4 ModelMatrix;
+uniform sampler2D TextureSampler;
 uniform DirectionalLight gDirectionalLight[LIGHTS];
 uniform float materialSpecularIntensity;                                                
 uniform float materialSpecularPower;
 
 // Input data from our vertex shader
-in vec4 vColor;
+in vec2 UVcoords;
 in vec3 vnDirection;
 in vec4 vPosition;
 
@@ -81,5 +82,5 @@ void main()
 		completeColor = completeColor + (ambientColor + diffuseColor  + specularColor);
 	}
 
-	FragColor = vColor * completeColor;
+	FragColor = texture2D(TextureSampler, UVcoords) * completeColor;
 }

@@ -138,9 +138,17 @@ void GlutProgram::initScene(void) {
 	this->directionalLights[1].useSpecular = 1;
 	this->lightSources[1].setDirectionalLight(this->directionalLights[1]);
 	
+	// init billboard
+	this->billboard[0].initVertices();
+	this->billboard[0].initTexture("data/explosion.bmp");
+	this->billboard[0].init(&this->shaderProgram);
+	this->billboard[0].setCam(&this->camera);
+	this->billboard[0].translate(-0.5f,5.0f,-1.0f);
+	
 	// init rendering cubes
 	// left cube
-	this->cube[0].initVertices("models/cube.obj", glm::vec3(1.0f,0.0f,0.0f));
+	this->cube[0].initVertices("models/cube.obj");
+	this->cube[0].initTexture("data/brick.bmp");
 	this->cube[0].init(&this->shaderProgram);
 	this->cube[0].setMatSpecularIntensity(1.0f);
 	this->cube[0].setMatSpecularPower(100.0f);
@@ -148,7 +156,8 @@ void GlutProgram::initScene(void) {
 	this->cube[0].translate(0.0f, 2.0f, 0.0f);
 	this->cube[0].setParent(&this->line[2]);
 	// right cube
-	this->cube[1].initVertices("models/cube.obj", glm::vec3(0.0f,1.0f,0.0f));
+	this->cube[1].initVertices("models/cube_wood.obj");
+	this->cube[1].initTexture("data/wood.bmp");
 	this->cube[1].init(&this->shaderProgram);
 	this->cube[1].setMatSpecularIntensity(1.0f);
 	this->cube[1].setMatSpecularPower(50.0f);
@@ -159,7 +168,8 @@ void GlutProgram::initScene(void) {
 	
 	// init rendering pyramids
 	// left pyramid
-	this->pyramid[0].initVertices("models/pyramid.obj", glm::vec3(0.0f,0.0f,1.0f));
+	this->pyramid[0].initVertices("models/pyramid.obj");
+	this->pyramid[0].initTexture("data/iron.bmp");
 	this->pyramid[0].init(&this->shaderProgram);
 	this->pyramid[0].setMatSpecularIntensity(1.0f);
 	this->pyramid[0].setMatSpecularPower(32.0f);
@@ -167,7 +177,8 @@ void GlutProgram::initScene(void) {
 	this->pyramid[0].rotateZ(-90);
 	this->pyramid[0].setParent(&this->line[5]);
 	// right ball
-	this->ball[0].initVertices("models/ball.obj", glm::vec3(1.0f,0.3f,0.6f));
+	this->ball[0].initVertices("models/ball.obj");
+	this->ball[0].initTexture("data/ball.bmp");
 	this->ball[0].init(&this->shaderProgram);
 	this->ball[0].setMatSpecularIntensity(1.0f);
 	this->ball[0].setMatSpecularPower(32.0f);
@@ -176,7 +187,8 @@ void GlutProgram::initScene(void) {
 	this->ball[0].setParent(&this->line[5]);
 	
 	// init rendering teapot-objects
-	this->teapot[0].initVertices("models/teapot.obj", glm::vec3(1.0f,1.0f,0.0f));
+	this->teapot[0].initVertices("models/teapot.obj");
+	this->teapot[0].initTexture("data/tea.bmp");
 	this->teapot[0].init(&this->shaderProgram);
 	this->teapot[0].setMatSpecularIntensity(1.0f);
 	this->teapot[0].setMatSpecularPower(80.0f);
@@ -186,19 +198,22 @@ void GlutProgram::initScene(void) {
 	
 	// background walls
 	// bottom
-	this->wall[0].initVertices("models/rectangle.obj", glm::vec3(0.8f,0.8f,1.0f));
+	this->wall[0].initVertices("models/rectangle.obj");
+	this->wall[0].initTexture("data/bottom.bmp");
 	this->wall[0].init(&this->shaderProgram);
 	this->wall[0].rotateX(90);
 	this->wall[0].scale(10);
 	this->wall[0].translate(3, -7, 3);
 	// left
-	this->wall[1].initVertices("models/rectangle.obj", glm::vec3(0.8f,0.8f,1.0f));
+	this->wall[1].initVertices("models/rectangle.obj");
+	this->wall[1].initTexture("data/wall.bmp");
 	this->wall[1].init(&this->shaderProgram);
 	this->wall[1].rotateY(-90);
 	this->wall[1].scale(10);
 	this->wall[1].translate(-7, 3, 3);
 	// back
-	this->wall[2].initVertices("models/rectangle.obj", glm::vec3(0.8f,0.8f,1.0f));
+	this->wall[2].initVertices("models/rectangle.obj");
+	this->wall[2].initTexture("data/wall.bmp");
 	this->wall[2].init(&this->shaderProgram);
 	this->wall[2].scale(10);
 	this->wall[2].rotateY(-180);
@@ -206,45 +221,52 @@ void GlutProgram::initScene(void) {
 	
 	// lines
 	// top centered vertical line
-	this->line[0].initVertices(glm::vec3(0.0,0.0,0.0));
+	this->line[0].initVertices();
+	this->line[0].initTexture("data/black.bmp");
 	this->line[0].init(&this->shaderProgram);
 	this->line[0].scale(1);
 	this->line[0].translate(0.0f,4.0f,-1.0f);
 	// top horizontal line
-	this->line[1].initVertices(glm::vec3(0.0,0.0,0.0)); 
+	this->line[1].initVertices();
+	this->line[1].initTexture("data/black.bmp");
 	this->line[1].init(&this->shaderProgram);
 	this->line[1].rotateZ(-90);
 	this->line[1].scale(4);
 	this->line[1].translate(-2.0f,0.0f,0.0f);
 	this->line[1].setParent(&this->line[0]);
 	// top left vertical line
-	this->line[2].initVertices(glm::vec3(0.0,0.0,0.0)); 
+	this->line[2].initVertices();
+	this->line[2].initTexture("data/black.bmp");
 	this->line[2].init(&this->shaderProgram);
 	this->line[2].scale(1);
 	this->line[2].rotateZ(-90);
 	this->line[2].setParent(&this->line[1]);
 	// top right vertical line
-	this->line[3].initVertices(glm::vec3(0.0,0.0,0.0)); 
+	this->line[3].initVertices();
+	this->line[3].initTexture("data/black.bmp");
 	this->line[3].init(&this->shaderProgram);
 	this->line[3].scale(1);
 	this->line[3].rotateZ(-90);
 	this->line[3].translate(0.0f,1.0f,0.0f);
 	this->line[3].setParent(&this->line[1]);
 	// bottom centered vertical line
-	this->line[4].initVertices(glm::vec3(0.0,0.0,0.0));
+	this->line[4].initVertices();
+	this->line[4].initTexture("data/black.bmp");
 	this->line[4].init(&this->shaderProgram);
 	this->line[4].scale(2);
 	this->line[4].translate(0.0f,0.0f,0.0f);
 	this->line[4].setParent(&this->cube[0]);
 	// bottom horizontal line
-	this->line[5].initVertices(glm::vec3(0.0,0.0,0.0));
+	this->line[5].initVertices();
+	this->line[5].initTexture("data/black.bmp");
 	this->line[5].init(&this->shaderProgram);
 	this->line[5].scale(4);
 	this->line[5].rotateZ(-90);
 	this->line[5].translate(-1.0f,1.0f,0.0f);
 	this->line[5].setParent(&this->line[4]);
 	// lowest vertical line
-	this->line[6].initVertices(glm::vec3(0.0,0.0,0.0));
+	this->line[6].initVertices();
+	this->line[6].initTexture("data/black.bmp");
 	this->line[6].init(&this->shaderProgram);
 	this->line[6].scale(1);
 	this->line[6].translate(0.0f,-1.5f,0.0f);
@@ -279,6 +301,8 @@ void GlutProgram::onDisplay(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	this->camera.render();
+	
+	this->billboard[0].render();
 	
 	// rendering hirarchie
 	this->line[0].render();
@@ -323,6 +347,9 @@ void GlutProgram::onIdle(void) {
 }
 
 void GlutProgram::onResize(int width, int height) {
+	// Set the viewport to be the entire window
+	glViewport(0, 0, width, height);
+	
 	glutPostRedisplay();
 }
 

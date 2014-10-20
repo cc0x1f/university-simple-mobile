@@ -18,22 +18,24 @@
 /* local includes */
 #include "../Helper.h"
 #include "../ShaderProgram.h"
+#include "../Texture.h"
 
 #ifndef __RENDERING_OBJECT_H__
 #define __RENDERING_OBJECT_H__
 class RenderingObject {
 	protected:
 		GLuint VBO;
-		GLuint CBO;
+		GLuint UV;
 		GLuint IBO;
 		GLuint NORMALS;
+		GLuint TEXTURE;
 		
 		RenderingObject *parent;
 
-		std::vector<glm::vec3> VBO_data;
-		std::vector<glm::vec3> NORMALS_data;
-		std::vector<glm::vec3> CBO_data;
-		std::vector<Helper::vec3s> IBO_data;
+		std::vector<float> VBO_data;
+		std::vector<float> NORMALS_data;
+		std::vector<float> UV_data;
+		std::vector<unsigned short> IBO_data;
 
 		glm::mat4 modelMatrix; // Model matrix
 		glm::mat4 renderingModelMatrix; // FINAL Model matrix for rendering
@@ -41,10 +43,13 @@ class RenderingObject {
 		glm::mat4 rotationMatrix;
 		glm::mat4 scaleMatrix;
 		glm::mat4 translationMatrix;
+		
+		TextureDataPtr *texture;
 
 		GLint modelUniform;
 		GLuint specularIntensityUniform;
 		GLuint specularPowerUniform;
+		GLuint textureUniform;
 		
 		GLenum renderingMode;
 		float specularIntensity;
@@ -53,6 +58,7 @@ class RenderingObject {
 		void calculateModelMatrix(void);
 	public:
 		void initUniformAndBuffer(ShaderProgram *shaderProgram);
+		void initTexture(const char *textureFile);
 		void init(ShaderProgram *shaderProgram);
 		void setParent(RenderingObject *parent);
 		RenderingObject *getParent(void);

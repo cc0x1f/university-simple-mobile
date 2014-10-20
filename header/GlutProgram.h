@@ -20,6 +20,7 @@
 #include "Camera.h"
 #include "Lightsource.h"
 #include "render/LineRenderingObject.h"
+#include "render/BillboardRenderingObject.h"
 #include "render/OBJRenderingObject.h"
 
 #ifndef __GLUT_PROGRAM_H__
@@ -39,6 +40,7 @@ class GlutProgram {
 		ShaderProgram shaderProgram;
 		Camera camera;
 		LineRenderingObject line[7]; // lines for connecting all other elements
+		BillboardRenderingObject billboard[1]; // billboard
 		OBJRenderingObject wall[3]; // background walls
 		// scene rendering objects =)
 		OBJRenderingObject cube[2];

@@ -25,11 +25,12 @@ uniform float materialSpecularPower;
 
 // Input vertex data, different for all executions of this shader.
 layout (location = 0) in vec3 Position;
-layout (location = 1) in vec4 Color;
+layout (location = 1) in vec2 UV;
 layout (location = 2) in vec3 Normal;
 
 // Output data ; will be interpolated for each fragment.
 out vec4 vColor;
+out vec2 UVcoords;
 
 void main()
 {
@@ -84,5 +85,6 @@ void main()
 	}
 	
 	// the color of the vertex
-	vColor = Color * completeColor;
+	vColor = completeColor;
+	UVcoords = UV;
 }
